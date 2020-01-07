@@ -1,0 +1,68 @@
+from flask import Flask,Blueprint, session,render_template, flash, redirect, url_for
+from flask_login import LoginManager, login_required,login_user, logout_user
+
+from utl.forms import SignUpForm, LogInForm
+
+import os
+
+
+app = Flask(__name__)
+
+DEBUG = True
+
+# app configurations
+app.config['SECRET_KEY'] = ('very secret key wow' if DEBUG else os.urandom(64))
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../database.db'
+app.config['USE_SESSION_FOR_NEXT'] = True
+
+@app.route('/', methods=['GET', 'POST'])
+def signup():
+    sign_up_form = SignUpForm()
+
+    if sign_up_form.validate_on_submit():
+        # we just need to check that no accounts exist with the same username
+        if User.query.filter_by(username=sign_up_form.username.data).first() is not None:
+            flash('Username taken!', 'danger')
+        else:
+            # create the account
+            new_account = User(sign_up_form.username.data, sign_up_form.password.data)
+            db.session.add(new_account)
+            db.session.commit()
+
+            flash('Account Created!', 'success')
+            return redirect(url_for('login'))
+    return render_template('signup.html', form=sign_up_form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    log_in_form = LogInForm()
+
+    if log_in_form.validate_on_submit():
+        to_validate = User.query.filter_by(username=log_in_form.username.data).first()
+
+        if to_validate is None or to_validate.password != log_in_form.password.data:
+            flash('Incorrect username or password!', 'danger')
+        else:
+            login_user(to_validate)
+
+            if 'next' in session:
+                return redirect(session['next'])
+            else:
+                flash('Logged in successfully!', 'success')
+                #return redirect(url_for('user.profile'))
+
+    return render_template('login.html', form=log_in_form)
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    logout_user()
+    flash('Logged out successfully!', 'success')
+    return redirect(url_for('index'))
+
+if __name__ == "__main__":
+    app.debug = True
+    app.run()
