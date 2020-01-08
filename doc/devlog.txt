@@ -17,3 +17,6 @@ Creating Login System based from previous project
 josephL -- 2020-01-07 23:07
 Created signup and login pages
 Boostrap doesnt work for some reason
+
+wangY -- 2020-01-07 23:40
+Created requirements doc and added pip installs
