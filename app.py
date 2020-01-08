@@ -17,7 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../database.db'
 app.config['USE_SESSION_FOR_NEXT'] = True
 
 @app.route('/', methods=['GET', 'POST'])
-def signup():
+def register():
     sign_up_form = SignUpForm()
 
     if sign_up_form.validate_on_submit():
@@ -32,7 +32,7 @@ def signup():
 
             flash('Account Created!', 'success')
             return redirect(url_for('login'))
-    return render_template('signup.html', form=sign_up_form)
+    return render_template('register.html', form=sign_up_form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
