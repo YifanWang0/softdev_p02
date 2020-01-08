@@ -8,4 +8,8 @@ Updated design doc with graphical representation of the db tables, made separate
 and individual groups. Also updated with diagram of the component map and added in the feature of multiple admins, drop-down menu of groups for tasks, and leaving groups.
 
 wangY -- 2020-01-07 00:04
-Updated design doc, including site map, db tables, and component map. Also updated list of site components with more detailed descriptions. 
+Updated design doc, including site map, db tables, and component map. Also updated list of site components with more detailed descriptions.
+
+josephL -- 2020-01-07 8:32
+Created routes/directories backbone
+Creating Login System based from previous project
