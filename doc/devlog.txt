@@ -13,3 +13,6 @@ Updated design doc, including site map, db tables, and component map. Also updat
 josephL -- 2020-01-07 8:32
 Created routes/directories backbone
 Creating Login System based from previous project
+
+wangY -- 2020-01-07 23:40
+Created requirements doc and added pip installs
