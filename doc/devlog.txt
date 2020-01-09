@@ -23,3 +23,7 @@ Created requirements doc and added pip installs
 
 yifanW -- 2020-01-09 01:26
 Updated design doc, highlighted changes
+
+chanC -- 2020-01-09 08:35
+Created homepage route
+Created basic homepage template
