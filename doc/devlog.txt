@@ -3,11 +3,11 @@ SoftDev1 pd1
 p02 - Time Page
 DEVLOG
 
-zhangE -- 2020-01-06 23:55
+emilyZ -- 2020-01-06 23:55
 Updated design doc with graphical representation of the db tables, made separate db tables for public groups, private groups, individual users, individual tasks,
 and individual groups. Also updated with diagram of the component map and added in the feature of multiple admins, drop-down menu of groups for tasks, and leaving groups.
 
-wangY -- 2020-01-07 00:04
+yifanW -- 2020-01-07 00:04
 Updated design doc, including site map, db tables, and component map. Also updated list of site components with more detailed descriptions.
 
 josephL -- 2020-01-07 8:32
@@ -18,5 +18,8 @@ josephL -- 2020-01-07 23:07
 Created signup and login pages
 Boostrap doesnt work for some reason
 
-wangY -- 2020-01-07 23:40
+yifanW -- 2020-01-07 23:40
 Created requirements doc and added pip installs
+
+yifanW -- 2020-01-09 01:26
+Updated design doc, highlighted changes
