@@ -5,6 +5,7 @@ from utl.forms import SignUpForm, LogInForm
 
 import os
 
+from app.models import db
 
 app = Flask(__name__)
 
@@ -16,6 +17,19 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../database.db'
 app.config['USE_SESSION_FOR_NEXT'] = True
 
+
+# set up login manager
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'auth.login'
+login_manager.login_message = 'Please Log In to view this page!'
+login_manager.login_message_category = 'danger'
+
+
+
+with app.app_context():
+    db.create_all()
+    
 @app.route('/', methods=['GET', 'POST'])
 def register():
     sign_up_form = SignUpForm()
@@ -62,6 +76,7 @@ def logout():
     logout_user()
     flash('Logged out successfully!', 'success')
     return redirect(url_for('index'))
+
 
 if __name__ == "__main__":
     app.debug = True
