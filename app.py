@@ -29,8 +29,12 @@ login_manager.login_message_category = 'danger'
 
 with app.app_context():
     db.create_all()
-    
-@app.route('/', methods=['GET', 'POST'])
+
+@app.route('/')
+def home():
+    return render_template('homepage.html')
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     sign_up_form = SignUpForm()
 
