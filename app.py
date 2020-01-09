@@ -16,7 +16,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../database.db'
 app.config['USE_SESSION_FOR_NEXT'] = True
 
-@app.route('/', methods=['GET', 'POST'])
+
+@app.route('/')
+def home():
+    return render_template('homepage.html')
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     sign_up_form = SignUpForm()
 
