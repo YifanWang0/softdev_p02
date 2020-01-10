@@ -12,7 +12,7 @@ In the midst of all the work and extracurricular activities, it may be hard for 
 ## APIs
 * [Google Calendar API](https://docs.google.com/document/d/1atMCAui86AwBSWEz8lCIJFaNkUL4V5fwVecNcnxSpP0/edit) (Note: A key is required for this API.)
   * Follow these instructions to create a Google API key:
-    * Go to the [Google Developers Console] (https://console.developers.google.com/)
+    * Go to the [Google Developers Console](https://console.developers.google.com/)
 
 ## Launch Codes 
 Assuming that pip and python3 are already install, first clone the repository and change directory to the cloned folder.
