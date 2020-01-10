@@ -2,8 +2,11 @@
 
 ## Team Roster:
 Clement Chan - create group, group requests, individual group pages, checklist for groups on monthly page
+
 Joseph Lee - search for public groups, monthly calendar display
+
 Yifan Wang - Project Manager, weekly page, profile
+
 Emily Zhang - daily page, tasks with descriptions on monthly page
 
 ## Description of Website
