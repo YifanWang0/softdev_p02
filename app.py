@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_required,login_user, logout_user
 
 from utl.forms import SignUpForm, LogInForm
 
-import os
+import os, json
 
 
 app = Flask(__name__)
