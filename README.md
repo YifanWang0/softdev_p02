@@ -13,7 +13,7 @@ In the midst of all the work and extracurricular activities, it may be hard for 
 * [Google Calendar API](https://docs.google.com/document/d/1atMCAui86AwBSWEz8lCIJFaNkUL4V5fwVecNcnxSpP0/edit) (Note: A key is required for this API, and to obtain the key you will need to create a project using your Google account.)
   * Follow these instructions to create a Google API key:
     * Go to the [Google Developers Console](https://console.developers.google.com/)
-    * Select **Create project** from the top left Project menu.
+    * Select **Create project** from the top left Project menu
     * Name your project and click **Create**
     * From the navigation menu, go to API & Services, then go into dashboard
     * Then click **ENABLE APIS & SERVICES**
