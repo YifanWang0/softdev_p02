@@ -21,7 +21,7 @@ cd softdev_p02/
 Then, create a virtual environment to run the program.
 ```
 python3 -m venv ~/<name_of_virtual_environment>
-. ~/<name_of_virtual_environmetn>/bin/activate
+. ~/<name_of_virtual_environment>/bin/activate
 ```
 Next, install the required modules/libraries.
 ```
