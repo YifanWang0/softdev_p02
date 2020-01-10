@@ -15,5 +15,19 @@ In the midst of all the work and extracurricular activities, it may be hard for 
 ## Launch Codes 
 Assuming that pip and python3 are already install, first clone the repository and change directory to the cloned folder.
 ```
-git clone 
+git clone https://github.com/YifanWang0/softdev_p02.git
+cd softdev_p02/
+```
+Then, create a virtual environment to run the program.
+```
+python3 -m venv ~/<name_of_virtual_environment>
+. ~/<name_of_virtual_environmetn>/bin/activate
+```
+Next, install the required modules/libraries.
+```
+pip install -r doc/requirements.txt
+```
+Finally, run the program
+```
+python3 app.py
 ```
