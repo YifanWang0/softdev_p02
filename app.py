@@ -1,4 +1,4 @@
-from flask import Flask,Blueprint, session,render_template, flash, redirect, url_for
+from flask import Flask, Blueprint, session, render_template, flash, redirect, url_for
 from flask_login import LoginManager, login_required,login_user, logout_user
 
 from utl.forms import SignUpForm, LogInForm
@@ -16,8 +16,17 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../database.db'
 app.config['USE_SESSION_FOR_NEXT'] = True
 
+keyfile = open('keys.json')
+keys = json.load(keyfile)
+googleCalendar_key = keys['google_calendar']
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
+def missing_keys():
+    for service in keys:
+        if keys[service] == 'YOUR_API_KEY_HERE':
+            flash('Key for {} is missing. See README.md for specific instructions.'.format(service),'error')
+    return render_template("homepage.html")
+
 def home():
     return render_template('homepage.html')
 
