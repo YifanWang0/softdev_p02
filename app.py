@@ -5,7 +5,7 @@ from utl.forms import SignUpForm, LogInForm
 
 import os
 
-from app.models import db
+from utl.models import db, User, Group, GroupLinks
 
 app = Flask(__name__)
 
