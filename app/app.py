@@ -23,34 +23,40 @@ app.config['USE_SESSION_FOR_NEXT'] = True
 # set up login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return None
 login_manager.login_view = 'auth.login'
 login_manager.login_message = 'Please Log In to view this page!'
 login_manager.login_message_category = 'danger'
 
-
-
 db.init_app(app)
+with app.app_context():
+    db.create_all()
 
 @app.route('/', methods=['GET', 'POST'])
+def home():
+    return render_template('homepage.html')
 def missing_keys():
     # for service in keys:
     #     if keys[service] == 'YOUR_API_KEY_HERE':
     #         flash('Key for {} is missing. See README.md for specific instructions.'.format(service),'error')
     return render_template("homepage.html")
 
-def home():
-    return render_template('homepage.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     sign_up_form = SignUpForm()
 
     if sign_up_form.validate_on_submit():
+        print("YOO")
         # we just need to check that no accounts exist with the same username
         if User.query.filter_by(username=sign_up_form.username.data).first() is not None:
             flash('Username taken!', 'danger')
         else:
             # create the account
+            print("YOO000")
             new_account = User(sign_up_form.username.data, sign_up_form.password.data)
             db.session.add(new_account)
             db.session.commit()

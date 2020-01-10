@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% from "macros/render_flashes.html" import render_flashes %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+{% block style %}
+
+{% endblock %}
+
+{% block content %}
+<div class="card mx-auto" style="width: 50%">
+    <div class="card-body">
+        <h5 class="card-title">Welcome to TimePage!</h5>
+              <body>
+                <form action="/register">
+                  <button type="submit">Register</button>
+                </form>
+                <br>
+                <form action="/login">
+                  <button type="submit">Login</button>
+                </form>
+
+              </body>
+    </div>
+</div>
+{% endblock content %}
+
+</html>
