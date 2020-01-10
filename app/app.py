@@ -17,10 +17,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../database.db'
 app.config['USE_SESSION_FOR_NEXT'] = True
 
-# keyfile = open('keys.json')
-# keys = json.load(keyfile)
-# googleCalendar_key = keys['google_calendar']
-# set up login manager
+keyfile = open('keys.json')
+keys = json.load(keyfile)
+googleCalendar_key = keys['google_calendar']
+#set up login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -36,12 +36,12 @@ with app.app_context():
     db.create_all()
 
 @app.route('/', methods=['GET', 'POST'])
-def home():
+def index():
     return render_template('homepage.html')
 def missing_keys():
-    # for service in keys:
-    #     if keys[service] == 'YOUR_API_KEY_HERE':
-    #         flash('Key for {} is missing. See README.md for specific instructions.'.format(service),'error')
+    for service in keys:
+        if keys[service] == 'YOUR_API_KEY_HERE':
+            flash('Key for {} is missing. See README.md for specific instructions.'.format(service),'error')
     return render_template("homepage.html")
 
 
