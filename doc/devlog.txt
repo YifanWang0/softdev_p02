@@ -34,3 +34,6 @@ Added placeholder key file
 
 clementC -- 2020-01-09 23:06
 updated keys.json
+
+josephL -- 2020-01-10 00:23
+fixing homepage.html and database

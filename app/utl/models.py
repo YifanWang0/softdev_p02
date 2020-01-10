@@ -10,7 +10,7 @@ class GroupLinks(db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
 
     user = db.relationship('User', backref='groupownership')
-    group = db.relationship('Card', backref='groupownership')
+    group = db.relationship('Group', backref='groupownership')
 
     def __init__(self, user_id, group_id):
         self.user_id = user_id
@@ -24,7 +24,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80), nullable=False)
     groups = association_proxy('groupownership',
                               'group',
-                              creator=lambda c: CardOwnership(id, c.id))
+                              creator=lambda c: GroupLinks(id, c.id))
 
     def __init__(self, username, password):
         self.username = username
@@ -37,7 +37,7 @@ class Group(db.Model):
     name = db.Column(db.String(80), unique=True, nullable=False)
     users = association_proxy('groupownership',
                               'user',
-                              creator=lambda u: CardOwnership(u.id, id))
+                              creator=lambda u: GroupLinks(u.id, id))
 
     def __init__(self, id, name):
         self.id = id
