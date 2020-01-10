@@ -37,3 +37,6 @@ updated keys.json
 
 josephL -- 2020-01-10 00:23
 fixing homepage.html and database
+
+josephL 2020-01-10 08:22
+fixed app.py reformatting issues
