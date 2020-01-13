@@ -47,3 +47,6 @@ fixed jsonDecodeError
 emilyZ -- 2020-01-12 21:50
 added routes and templates for navbar
 implemented basic add task template for frontend
+
+josephL -- 2020-01-13 9:26
+created tasks and groups relationship models 
