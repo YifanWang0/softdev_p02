@@ -43,3 +43,7 @@ fixed app.py reformatting issues
 
 clementC -- 2020-01-10 8:23
 fixed jsonDecodeError
+
+emilyZ -- 2020-01-12 21:50
+added routes and templates for navbar
+implemented basic add task template for frontend

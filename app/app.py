@@ -94,6 +94,26 @@ def logout():
     flash('Logged out successfully!', 'success')
     return redirect(url_for('index'))
 
+@app.route('/day')
+def day():
+    return render_template('day.html')
+
+@app.route('/week')
+def week():
+    return render_template('week.html')
+
+@app.route('/month')
+def month():
+    return render_template('month.html')
+
+@app.route('/search')
+def search():
+    return render_template('search.html')
+
+@app.route('/requests')
+def requests():
+    return render_template('requests.html')
+
 
 if __name__ == "__main__":
     app.debug = True
