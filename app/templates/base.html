@@ -73,7 +73,14 @@
                                 class="fas fa-sign-out-alt"></i>Log out</button></a></li>
                 {% endif %}
             </div>
+
         </nav>
+        <div id="form button" style = "position: absolute; bottom: 1%; right: 1%;">
+            <form action="/create">
+                <button type = submit class="btn btn-primary">Create New Task</button>
+            </form>
+        </div>
+
     {% block content %}
     
     {% endblock content %}
