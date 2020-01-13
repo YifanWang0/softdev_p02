@@ -37,7 +37,7 @@ with app.app_context():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('homepage.html')
+    return render_template('welcome.html')
 def missing_keys():
     for service in keys:
         if keys[service] == 'YOUR_API_KEY_HERE':
@@ -94,7 +94,10 @@ def logout():
     flash('Logged out successfully!', 'success')
     return redirect(url_for('index'))
 
-
+@app.route('/home', methods = ['GET','POST'])
+def home():
+    return render_template('home.html')
+    
 if __name__ == "__main__":
     app.debug = True
     app.run()
