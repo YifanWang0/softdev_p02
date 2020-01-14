@@ -52,7 +52,10 @@ class Group(db.Model):
 class Task(db.Model):
     #columns
     id = db.Column(db.Integer,primary_key=True)
-    due_date = db.Column(db.DateTime, nullable = False)
+    due_date_m = db.Column(db.Integer, nullable = False)
+    due_date_dd = db.Column(db.Integer, nullable = False)
+    due_date_hr = db.Column(db.Integer)
+    due_date_mm = db.Column(db.Integer)
     priority = db.Column(db.Integer, nullable = False)
     timestamp = db.Column(db.DateTime, nullable=False,
                                        default=datetime.utcnow)
@@ -65,8 +68,9 @@ class Task(db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))#this is created when append a task to a group)
 
 
-    def __init__(self, due_date, priority, title, description):
-        self.due_date = due_date
+    def __init__(self, month, day, priority, title, description):
+        self.due_date_m = month
+        self.due_date_dd = day
         self.priority = priority
         self.title = title
         self.description = description

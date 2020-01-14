@@ -1,5 +1,5 @@
 from flask import Flask, Blueprint, session, render_template, flash, redirect, url_for
-from flask_login import LoginManager, login_required, login_user, logout_user
+from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 
 from utl.forms import SignUpForm, LogInForm
 
@@ -131,12 +131,26 @@ def requests():
 
 @app.route('/addTask', methods=['GET', 'POST'])
 def addTask():
+    if 'title' in request.form.keys()
+    and 'description' in request.form.keys()
+    and 'date'in request.form.keys():
+        date = request.form['date'].split("/")
+        month = int(date[0])
+        day = int(date[1])
+        task = Task(month,day,0,request.form['title'],request.form['description'])
+        current_user.tasks.append(task)
+        db.session.add(task)
+        db.session.commit()
     return "add task"
-
 
 @app.route('/addEvent', methods=['GET', 'POST'])
 def addEvent():
     return "add task"
+
+@app.route('/joinGroup', methods=['GET', 'POST'])
+def joinGroup():
+    if 'group name' in title.form.keys():
+        Group.query.filter_by(name = )
 
 
 if __name__ == "__main__":
