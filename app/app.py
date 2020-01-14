@@ -96,9 +96,6 @@ def logout():
 
 @app.route('/day', methods=['GET', 'POST'])
 def day():
-    if 'user_id' not in session:
-        flash('You must log in to access this page', 'warning')
-        # return redirect(url_for('index'))
     return render_template('day.html')
 
 
