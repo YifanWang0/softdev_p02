@@ -45,7 +45,7 @@ clementC -- 2020-01-10 8:23
 fixed jsonDecodeError
 
 josephL -- 2020-01-10 19:12
-added mygroups path and html 
+added mygroups path and html
 
 josephL -- 2020-01-11 15:23
 developing relationships in models.py
@@ -67,3 +67,6 @@ added creating task function
 
 josephL --2020-01-14 10:29
 created join group html form
+
+josephL --2020-01-14 15:26
+started writing search
