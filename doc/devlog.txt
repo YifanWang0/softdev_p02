@@ -58,3 +58,9 @@ created tasks and groups relationship models
 josephL -- 2020-01-13 18:59
 fixed app.py, fixed button to show only when logged in
 fixing models
+
+josephL -- 2020-01-14 8:24
+added creating task function
+
+josephL --2020-01-14 10:29
+created join group html form
