@@ -1,3 +1,69 @@
 {% extends "base.html" %}
+
+{% block style %}
+<style>
+    .no-bullets ul {
+        list-style-type: none;
+        display: inline-block;
+    }
+</style>
+
+{% endblock style %}
+
+
 {% block content %}
+<div class="title">
+    <h1>Search for a group to join</h1>
+    <div><a class="btn btn-outline-primary" href={{ url_for('createGroup') }} role="button">Create Group</a></div>
+</div>
+
+<form method="POST">
+    {{ form.csrf_token }}
+
+    {{ form_field(form.search) }}
+    <a class="btn btn-secondary" data-toggle="collapse" href="#rarities-collapse" role="button" aria-expanded="false" aria-controls="rarities-collapse">Filter by Rarity
+    </a>
+    <a class="btn btn-secondary" data-toggle="collapse" href="#type-collapse" role="button" aira-expanded="false" aria-controls="type-collapse">Filter by Type</a>
+    <div class="collapse no-bullets" id="rarities-collapse">
+        {{ form_field(form.rarities) }}
+    </div>
+    <div class="collapse no-bullets" id="type-collapse">
+        {{ form_field(form.types) }}
+    </div>
+    <br><br>
+    {{ form_field(form.submit) }}
+</form>
+
+<hr>
+
+{% if results is not none %}
+
+<p>Search results for: {{ query }}</p>
+
+{% for card_list in results %}
+
+<div class="row">
+    {% for card in card_list %}
+
+    <div class="col">
+        {% if card is not none %}
+        {{render_card(card,True,True,True)}}
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</div><br>
+
+
+{% endfor %}
+
+{% if results == [] %}
+<br><br><br>
+<p class="text-center"><em>No cards found!</em></p>
+{% endif %}
+
+{% endif %}
+
 {% endblock %}
