@@ -128,7 +128,10 @@ def search():
 def requests():
     return render_template('requests.html')
 
-
+@app.route('/myGroups', methods=['GET','POST'])
+def myGroups():
+    return render_template('mygroups.html')
+    
 @app.route('/addTask', methods=['GET', 'POST'])
 def addTask():
     if 'title' in request.form.keys()

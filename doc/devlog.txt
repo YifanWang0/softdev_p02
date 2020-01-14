@@ -44,6 +44,9 @@ fixed app.py reformatting issues
 clementC -- 2020-01-10 8:23
 fixed jsonDecodeError
 
+josephL -- 2020-01-10 19:12
+added mygroups path and html 
+
 josephL -- 2020-01-11 15:23
 developing relationships in models.py
 finding ways to implement credibility
