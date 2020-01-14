@@ -44,9 +44,17 @@ fixed app.py reformatting issues
 clementC -- 2020-01-10 8:23
 fixed jsonDecodeError
 
+josephL -- 2020-01-11 15:23
+developing relationships in models.py
+finding ways to implement credibility
+
 emilyZ -- 2020-01-12 21:50
 added routes and templates for navbar
 implemented basic add task template for frontend
 
 josephL -- 2020-01-13 9:26
-created tasks and groups relationship models 
+created tasks and groups relationship models
+
+josephL -- 2020-01-13 18:59
+fixed app.py, fixed button to show only when logged in
+fixing models
