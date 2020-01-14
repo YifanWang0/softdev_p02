@@ -30,6 +30,7 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/0691185925.js" crossorigin="anonymous"></script>
+    <script src="/static/js/myPopover.js"></script>
 </head>
 <body>
         <nav class="navbar navbar-expand-sm bg-dark">
@@ -73,12 +74,48 @@
                                 class="fas fa-sign-out-alt"></i>Log out</button></a></li>
                 {% endif %}
             </div>
-
         </nav>
+
         <div id="form button" style = "position: absolute; bottom: 1%; right: 1%;">
-            <form action="/create">
-                <button type = submit class="btn btn-primary">Create New Task</button>
-            </form>
+                <button class="btn btn-primary" role="button" data-toggle="popover" data-trigger="focus"
+                        data-html="true" data-placement="top" title="Create New">
+                    Create</button>
+
+        </div>
+
+        <div id="myModal1" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Modal1 Header</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Some text in the modal.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="myModal2" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Modal2 Header</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Some text in the modal.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     {% block content %}
