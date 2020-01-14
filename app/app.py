@@ -1,5 +1,5 @@
 from flask import Flask, Blueprint, session, render_template, flash, redirect, url_for
-from flask_login import LoginManager, login_required,login_user, logout_user
+from flask_login import LoginManager, login_required, login_user, logout_user
 
 from utl.forms import SignUpForm, LogInForm
 
@@ -20,13 +20,16 @@ app.config['USE_SESSION_FOR_NEXT'] = True
 keyfile = open('keys.json')
 keys = json.load(keyfile)
 googleCalendar_key = keys['google_calendar']
-#set up login manager
+# set up login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
+
 
 @login_manager.user_loader
 def load_user(user_id):
     return None
+
+
 login_manager.login_view = 'auth.login'
 login_manager.login_message = 'Please Log In to view this page!'
 login_manager.login_message_category = 'danger'
@@ -35,13 +38,16 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('welcome.html')
+    return render_template('homepage.html')
+
+
 def missing_keys():
     for service in keys:
         if keys[service] == 'YOUR_API_KEY_HERE':
-            flash('Key for {} is missing. See README.md for specific instructions.'.format(service),'error')
+            flash('Key for {} is missing. See README.md for specific instructions.'.format(service), 'error')
     return render_template("homepage.html")
 
 
@@ -82,7 +88,7 @@ def login():
                 return redirect(session['next'])
             else:
                 flash('Logged in successfully!', 'success')
-                #return redirect(url_for('user.profile'))
+                # return redirect(url_for('user.profile'))
 
     return render_template('login.html', form=log_in_form)
 
@@ -95,7 +101,7 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/day')
+@app.route('/day', methods=['GET', 'POST'])
 def day():
     if 'user_id' not in session:
         flash('You must log in to access this page', 'warning')
@@ -106,6 +112,7 @@ def day():
 @app.route('/week', methods=['GET', 'POST'])
 def week():
     return render_template('week.html')
+
 
 @app.route('/month', methods=['GET', 'POST'])
 def month():
@@ -121,9 +128,15 @@ def search():
 def requests():
     return render_template('requests.html')
 
-@app.route('/create')
-def create():
-    return "create"
+
+@app.route('/addTask', methods=['GET', 'POST'])
+def addTask():
+    return "add task"
+
+
+@app.route('/addEvent', methods=['GET', 'POST'])
+def addEvent():
+    return "add task"
 
 
 if __name__ == "__main__":
