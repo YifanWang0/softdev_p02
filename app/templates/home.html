@@ -1,8 +1,37 @@
 {% extends "base.html" %}
 
-{% from "macros/render_flashes.html" import render_flashes %}
+{% block style %}
+
+<style>
+    #index-card {
+        width: 40%;
+        left: 30%;
+    }
+</style>
+
+{% endblock style %}
 
 {% block content %}
 
+<div class="card" id="index-card">
+    <div class="card-body">
+        <img src="https://cdn.bulbagarden.net/upload/thumb/7/72/May_Silcoon.png/220px-May_Silcoon.png" class="card-img-top">
+        <h5 class="card-title text-center">
+            Welcome to the Silcoon Road!
+        </h5>
+
+        <p class="card-text">Welcome to the Time Page! An interactive experience for Pokemon Trading Card Game enthusiasts. Users will be able to buy, sell, and trade digital Pokemon cards with people from all over the world. <p>
+                <div class="text-center">
+                    <button type="button" class="btn btn-light">
+                        <a href="{{ url_for('login') }}" style="text-decoration: none;">Log In</a>
+                    </button>
+                    <button type="button" class="btn btn-light">
+                        <a href="{{ url_for('register') }}" style="text-decoration: none;">Sign Up</a>
+                    </button>
+                </div>
+
+
+    </div>
+</div>
 
 {% endblock content %}
