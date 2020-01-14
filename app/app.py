@@ -94,29 +94,36 @@ def logout():
     flash('Logged out successfully!', 'success')
     return redirect(url_for('index'))
 
-@app.route('/home', methods = ['GET','POST'])
-def home():
-    return render_template('home.html')
-    
+
 @app.route('/day')
 def day():
+    if 'user_id' not in session:
+        flash('You must log in to access this page', 'warning')
+        # return redirect(url_for('index'))
     return render_template('day.html')
 
-@app.route('/week')
+
+@app.route('/week', methods=['GET', 'POST'])
 def week():
     return render_template('week.html')
 
-@app.route('/month')
+@app.route('/month', methods=['GET', 'POST'])
 def month():
     return render_template('month.html')
 
-@app.route('/search')
+
+@app.route('/search', methods=['GET', 'POST'])
 def search():
     return render_template('search.html')
 
-@app.route('/requests')
+
+@app.route('/requests', methods=['GET', 'POST'])
 def requests():
     return render_template('requests.html')
+
+@app.route('/create')
+def create():
+    return "create"
 
 
 if __name__ == "__main__":

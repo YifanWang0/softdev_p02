@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% if 'user_id' in  session %}
     <div class="card">
         <div class="card-body">
             <form action="/addtask">
@@ -20,4 +21,5 @@
             </form>
         </div>
     </div>
+    {% endif %}
 {% endblock %}
