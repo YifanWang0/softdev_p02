@@ -41,14 +41,14 @@ with app.app_context():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('homepage.html')
+    return render_template('home.html')
 
 
 def missing_keys():
     for service in keys:
         if keys[service] == 'YOUR_API_KEY_HERE':
             flash('Key for {} is missing. See README.md for specific instructions.'.format(service), 'error')
-    return render_template("homepage.html")
+    return render_template("home.html")
 
 
 @app.route('/register', methods=['GET', 'POST'])

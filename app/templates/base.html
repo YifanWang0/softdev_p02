@@ -86,7 +86,7 @@
     </div>
 </nav>
 
-<div id="form button" style="position: absolute; bottom: 1%; right: 1%;">
+<div id="form button" style="position: absolute; bottom: 2%; right: 2%;">
     <button class="btn btn-primary" role="button" data-toggle="popover" data-trigger="focus"
             data-html="true" data-placement="top" title="Create New">
         Create
@@ -111,15 +111,15 @@
                             <div class="form-group">
                                 Task Name
                                 <input class="form-control-sm card-title" type="text" name="title"
-                                       placeholder="Title"><br>
+                                       placeholder="Title" required><br>
                             </div>
                             <div class="form-group">
                                 Description
-                                <input class="form-control-sm" type="text" name="description" placeholder="Description"><br><br>
+                                <input class="form-control-sm" type="text" name="description" placeholder="Description" required><br><br>
                             </div>
                             <div class="form-group">
                                 <label class="control-label" for="date">Due</label>
-                                <input class="form-control-sm" id="date" name="date" placeholder="MM/DD" type="text"/>
+                                <input class="form-control-sm" id="date" name="date" placeholder="MM/DD" type="text" required>
                             </div>
                             <button class="btn btn-primary" type="submit">Add Task</button>
                         </form>
@@ -149,15 +149,15 @@
                             <div class="form-group">
                                 Event Name
                                 <input class="form-control-sm card-title" type="text" name="title"
-                                       placeholder="Title"><br>
+                                       placeholder="Title" required><br>
                             </div>
                             <div class="form-group">
                                 Description
-                                <input class="form-control-sm" type="text" name="description" placeholder="Description"><br><br>
+                                <input class="form-control-sm" type="text" name="description" placeholder="Description" required><br><br>
                             </div>
                             <div class="form-group">
                                 <label class="control-label" for="date">Date</label>
-                                <input class="form-control-sm" id="date" name="date" placeholder="MM/DD" type="text"/>
+                                <input class="form-control-sm" id="date" name="date" placeholder="MM/DD" type="text" required>
                             </div>
                             <button class="btn btn-primary" type="submit">Add Event</button>
                         </form>
