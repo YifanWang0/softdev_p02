@@ -9,7 +9,7 @@ class GroupLinks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
-    admin = db.Column(db.Boolean, nullable = False)
+    credibility = db.Column(db.Integer)
 
     user = db.relationship('User', backref='groupownership')
     group = db.relationship('Group', backref='groupownership')
@@ -18,24 +18,12 @@ class GroupLinks(db.Model):
         self.user_id = user_id
         self.group_id = group_id
 
-
-class TaskLinks(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    task_id = db.Column(db.Integer, db.ForeignKey('task.id'))
-
-    user = db.relationship('User', backref='taskownership')
-    task = db.relationship('Task', backref='taskownership')
-
-    def __init__(self, user_id, task_id):
-        self.user_id = user_id
-        self.group_id = task_id
-
 class User(db.Model, UserMixin):
     # columns
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
+    tasks = db.relationship('Task', backref='user')
     groups = association_proxy('groupownership',
                               'group',
                               creator=lambda c: GroupLinks(id, c.id))
@@ -49,6 +37,7 @@ class Group(db.Model):
     # columns
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
+    tasks = db.relationship('Task', backref='group')
     users = association_proxy('groupownership',
                               'user',
                               creator=lambda u: GroupLinks(u.id, id))
@@ -57,6 +46,9 @@ class Group(db.Model):
 
 class Task(db.Model):
     id = db.Column(db.Integer,primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
+
     due_date = db.Column(db.DateTime, nullable = False)
     priority = db.Column(db.Integer, nullable = False)
     timestamp = db.Column(db.DateTime, nullable=False,
@@ -66,9 +58,6 @@ class Task(db.Model):
     upvotes = db.Columnn(db.Integer, nullable = False)
     downvotes = db.Column(db.Integer, nullable = False)
 
-    users = association_proxy('taskownership',
-                              'user',
-                              creator=lambda u: GroupLinks(u.id, id))
 
     def __init__(self, due_date, priority, title, description):
         self.due_date = due_date
