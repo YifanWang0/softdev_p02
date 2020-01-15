@@ -5,6 +5,8 @@ from utl.forms import SignUpForm, LogInForm
 
 import os, json
 
+from datetime import datetime
+
 from utl.models import db, User, Group, GroupLinks
 
 app = Flask(__name__)
@@ -23,16 +25,13 @@ googleCalendar_key = keys['google_calendar']
 # set up login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return None
-
-
 login_manager.login_view = 'auth.login'
 login_manager.login_message = 'Please Log In to view this page!'
 login_manager.login_message_category = 'danger'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
 
 db.init_app(app)
 with app.app_context():
@@ -105,8 +104,16 @@ def logout():
 def day():
     if 'user_id' not in session:
         flash('You must log in to access this page', 'warning')
-        # return redirect(url_for('index'))
-    return render_template('day.html')
+        return redirect(url_for('index'))
+    else:
+        today = datetime.today()
+        personal_tasks = Task.query.filter_by(user_id = current_user.id,
+                                              group_id = None,
+                                              due_date_m = int(today.stfrtime('%m')),
+                                              due_date_dd = int(today.stfrtime('%m')),
+                                              due_date_hr = int(today.stfrtime('%m'))
+                                              )
+        return render_template('day.html')
 
 
 @app.route('/week', methods=['GET', 'POST'])
@@ -121,7 +128,47 @@ def month():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
-    return render_template('search.html')
+    @login_required
+    def search():
+
+        SEARCH_LIMIT = 100
+        PER_ROW = 3
+
+        form = SearchForm()
+
+        full_results = None
+
+        if form.validate_on_submit():
+            results = Group.query.filter(
+                Group.name.like('%{}%'.format(form.search.data))).all()
+
+            sales = Sale.query.all()
+            all_ids = set([i.card_id for i in sales])
+
+            results = [i for i in results if i.id in all_ids]
+
+            # cut results off
+            results = results[:SEARCH_LIMIT]
+
+            # pad results
+            while len(results) % PER_ROW != 0:
+                results.append(None)
+
+            full_results = []
+
+            print(full_results)
+
+            for i in range(len(results) // PER_ROW):
+                full_results.append(results[i * PER_ROW:(i + 1) * PER_ROW])
+        else:
+            form.rarities.data = []
+            form.types.data = []
+
+        return render_template('search.html',
+                               form=form,
+                               query=form.search.data,
+                               limit=SEARCH_LIMIT,
+                               results=full_results)
 
 
 @app.route('/requests', methods=['GET', 'POST'])
@@ -130,13 +177,19 @@ def requests():
 
 @app.route('/myGroups', methods=['GET','POST'])
 def myGroups():
+    Group.query.filter_by()
     return render_template('mygroups.html')
-    
-@app.route('/addTask', methods=['GET', 'POST'])
+@app.route('/leaveGroup', methods=['GET', 'POST'])
+def leaveGroup(group_id):
+    current_user
+@app.route('/deleteTask', methods=['GET', 'POST'])
+@app.route('/editTask', methods=['GET', 'POST'])
+@app.route('/editGroup', methods=['GET', 'POST'])
+@app.route('/Requests', methods=['GET'])
+@app.route('/Requests', methods=['POST'])
+
 def addTask():
-    if 'title' in request.form.keys()
-    and 'description' in request.form.keys()
-    and 'date'in request.form.keys():
+    if 'title' in request.form.keys() and 'description' in request.form.keys() and 'date'in request.form.keys():
         date = request.form['date'].split("/")
         month = int(date[0])
         day = int(date[1])
@@ -153,7 +206,7 @@ def addEvent():
 @app.route('/joinGroup', methods=['GET', 'POST'])
 def joinGroup():
     if 'group name' in title.form.keys():
-        Group.query.filter_by(name = )
+        Group.query.filter_by(id = 2)
 
 
 if __name__ == "__main__":

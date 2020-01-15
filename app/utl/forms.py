@@ -29,9 +29,7 @@ class LogInForm(FlaskForm):
         'Password', validators=[DataRequired(),
                                 Length(min=6, max=80)])
     submit = SubmitField('Log In')
-    
+
 class SearchForm(FlaskForm):
-    rarities = MultiCheckboxField('Filter by rarity:', choices=RARITY_OPTIONS)
-    types = MultiCheckboxField('Filter by type:', choices=TYPE_OPTIONS)
     search = StringField('Query:', validators=[Length(min=0, max=80)])
     submit = SubmitField('Search')

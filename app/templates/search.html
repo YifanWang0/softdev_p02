@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% from "macros/render_field.html" import form_field %}
+
 {% block style %}
 <style>
     .no-bullets ul {
@@ -17,36 +19,42 @@
     <div><a class="btn btn-outline-primary" href={{ url_for('createGroup') }} role="button">Create Group</a></div>
 </div>
 
+
+<hr>
+
 <form method="POST">
     {{ form.csrf_token }}
 
     {{ form_field(form.search) }}
-    <a class="btn btn-secondary" data-toggle="collapse" href="#rarities-collapse" role="button" aria-expanded="false" aria-controls="rarities-collapse">Filter by Rarity
-    </a>
-    <a class="btn btn-secondary" data-toggle="collapse" href="#type-collapse" role="button" aira-expanded="false" aria-controls="type-collapse">Filter by Type</a>
-    <div class="collapse no-bullets" id="rarities-collapse">
-        {{ form_field(form.rarities) }}
-    </div>
-    <div class="collapse no-bullets" id="type-collapse">
-        {{ form_field(form.types) }}
-    </div>
     <br><br>
     {{ form_field(form.submit) }}
 </form>
-
-<hr>
 
 {% if results is not none %}
 
 <p>Search results for: {{ query }}</p>
 
-{% for card_list in results %}
+{% for group_list in results %}
 
 <div class="row">
-    {% for card in card_list %}
+    {% for group in card_list %}
 
     <div class="col">
-        {% if card is not none %}
+        {% if group is not none %}
+
+        <div class="card-footer bg-transparent">
+            <form action = {{url_for('user.buyCards')}} method = "POST">
+                {% if in_stock %}
+                <button type="submit" name="card" value="{{ card.id }}"
+                    class="btn btn-primary btn-block">
+                    Buy
+                {% else %}
+                <button type="button" class="btn btn-secondary btn-block" disabled>
+                    Out of Stock
+                {% endif %}
+                </button>
+            </form>
+        </div>
         {{render_card(card,True,True,True)}}
         {% endif %}
 
