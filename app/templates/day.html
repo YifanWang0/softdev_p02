@@ -2,7 +2,15 @@
 
 {% block content %}
     {% if current_user.is_authenticated %}
-      Tasks
-      {{tasks}}
+        <h1>View Your Tasks</h1>
+        {% for task in tasks %}
+            <div class="card" style="width: 50 rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{task.title}}</h5> <h6>Due: {{task.due_date_m}}/{{task.due_date_d}}</h6>
+                    <p class="card-text">{{task.description}}</p>
+                    <a href="/edittask" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+        {% endfor %}
     {% endif %}
 {% endblock %}
