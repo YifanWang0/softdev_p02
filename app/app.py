@@ -1,13 +1,13 @@
-from flask import Flask, Blueprint, session, render_template, flash, redirect, url_for
+from flask import Flask, Blueprint, session, render_template, flash, redirect, url_for, request
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 
-from utl.forms import SignUpForm, LogInForm
+from utl.forms import SignUpForm, LogInForm, SearchForm
 
 import os, json
 
 from datetime import datetime
 
-from utl.models import db, User, Group, GroupLinks
+from utl.models import db, User, Group, GroupLinks, Task
 
 app = Flask(__name__)
 
@@ -188,12 +188,14 @@ def leaveGroup(group_id):
 @app.route('/Requests', methods=['GET'])
 @app.route('/Requests', methods=['POST'])
 
+
+@app.route('/addTask', methods=['GET', 'POST'])
 def addTask():
     if 'title' in request.form.keys() and 'description' in request.form.keys() and 'date'in request.form.keys():
         date = request.form['date'].split("/")
         month = int(date[0])
         day = int(date[1])
-        task = Task(month,day,0,request.form['title'],request.form['description'])
+        task = Task(month,day,0,request.form['title'], request.form['description'])
         current_user.tasks.append(task)
         db.session.add(task)
         db.session.commit()
