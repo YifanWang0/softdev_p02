@@ -115,12 +115,6 @@ def day():
                                               )
         return render_template('day.html')
 
-
-@app.route('/week', methods=['GET', 'POST'])
-def week():
-    return render_template('week.html')
-
-
 @app.route('/month', methods=['GET', 'POST'])
 def month():
     return render_template('month.html')
@@ -219,9 +213,9 @@ def createGroup():
     if 'group name' in title.form.keys():
         Group.query.filter_by(id = 2)
 
-# @app.route('/profile', methods=['GET', 'POST'])
-# def requests():
-#     return render_template('profile.html')
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    return render_template('profile.html')
 
 if __name__ == "__main__":
     app.debug = True
