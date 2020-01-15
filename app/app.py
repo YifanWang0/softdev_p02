@@ -216,6 +216,13 @@ def createGroup():
         current_user.append(group)
         db.session.add(group)
         db.session.commit()
+    if 'group name' in title.form.keys():
+        Group.query.filter_by(id = 2)
+
+@app.route('/profile', methods=['GET', 'POST'])
+def requests():
+    return render_template('profile.html')
+
 if __name__ == "__main__":
     app.debug = True
     app.run()
