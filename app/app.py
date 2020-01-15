@@ -2,7 +2,7 @@ from flask import Flask, Blueprint, session, render_template, flash, redirect, u
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 
 from utl.forms import SignUpForm, LogInForm, SearchForm
-
+from flask_sqlalchemy import SQLAlchemy
 import os, json
 
 from datetime import datetime
@@ -33,9 +33,9 @@ login_manager.login_message_category = 'danger'
 def load_user(user_id):
     return User.query.get(user_id)
 
-db.init_app(app)
-with app.app_context():
-    db.create_all()
+#database
+db = SQLAlchemy(app)
+db.app = app
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -46,7 +46,7 @@ def index():
 def missing_keys():
     for service in keys:
         if keys[service] == 'YOUR_API_KEY_HERE':
-            flash('Key for {} is missing. See README.md for specific instructions.'.format(service), 'error')
+            flash('Key for {} is missing. See README.md for specific instructions.'.argsat(service), 'error')
     return render_template("home.html")
 
 
@@ -172,16 +172,16 @@ def leaveGroup():
 
 @app.route('/addTask', methods=['GET','POST'])
 def addTask():
-    print(request.form['title'])
-    if 'title' in request.form.keys() and 'description' in request.form.keys() and 'date'in request.form.keys() and 'time' in request.form.keys():
+    print(request.args)
+    if 'title' in request.args and 'description' in request.args and 'date'in request.args and 'time' in request.args:
         print("YOO")
-        date = request.form['date'].split("/")
-        time = request.form['time'].split(":")
+        date = request.args['date'].split("/")
+        time = request.args['time'].split(":")
         month = int(date[0])
         day = int(date[1])
         hour = int(time[0])
         min = int(time[1])
-        task = Task(month,day,hour,min,0,request.form['title'], request.form['description'])
+        task = Task(month,day,hour,min,0,request.args['title'], request.args['description'])
         current_user.tasks.append(task)
         db.session.add(task)
         db.session.commit()
@@ -189,16 +189,16 @@ def addTask():
 
 @app.route('/addEvent', methods=['GET', 'POST'])
 def addEvent():
-    print(request.form['title'])
-    if 'title' in request.form.keys() and 'description' in request.form.keys() and 'date'in request.form.keys() and 'time' in request.form.keys():
+    print(request.args['title'])
+    if 'title' in request.args and 'description' in request.args and 'date'in request.args and 'time' in request.args:
         print("YOO")
-        date = request.form['date'].split("/")
-        time = request.form['time'].split(":")
+        date = request.args['date'].split("/")
+        time = request.args['time'].split(":")
         month = int(date[0])
         day = int(date[1])
         hour = int(time[0])
         min = int(time[1])
-        task = Task(month,day,hour,min,0,request.form['title'], request.form['description'])
+        task = Task(month,day,hour,min,0,request.args['title'], request.args['description'])
         current_user.tasks.append(task)
         db.session.add(task)
         db.session.commit()
@@ -206,16 +206,23 @@ def addEvent():
 
 @app.route('/joinGroup', methods=['GET', 'POST'])
 def joinGroup():
-    if 'name' in request.form.keys() and 'description' in request.form.keys():
-        Group.query.filter_by(id = int(request.form['group_name']))
+    if 'name' in request.args and 'description' in request.args:
+        Group.query.filter_by(id = int(request.args['group_name']))
 
-@app.route('/createGroup', methods=['GET', 'POST'])
+@app.route('/createGroup', methods=['GET'])
+def createGroupForm():
+    return render_template('creategroup.html')
+
+@app.route('/createGroup', methods=['POST'])
 def createGroup():
-    if 'name' in request.form.keys() and 'description' in request.form.keys():
-        group = Group(request.form['name'],current_user.id, request.form['description'])
+    print(request.args)
+    if 'title' in request.args and 'description' in request.args:
+        print("YOOO")
+        group = Group(request.args['title'],current_user.id, request.args['description'])
         current_user.append(group)
         db.session.add(group)
         db.session.commit()
+    return redirect(url_for('search'))
 if __name__ == "__main__":
     app.debug = True
     app.run()

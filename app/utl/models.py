@@ -71,16 +71,6 @@ class Task(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False) #this is created when you append a task to a person
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))#this is created when append a task to a group)
 
-
-    def __init__(self, month, day, priority, title, description):
-        self.due_date_m = month
-        self.due_date_dd = day
-        self.priority = priority
-        self.title = title
-        self.description = description
-        self.upvotes = None
-        self.downvotes = None
-
     def __init__(self, month, day, hour, min, priority, title, description):
         self.due_date_m = month
         self.due_date_dd = day
@@ -91,3 +81,19 @@ class Task(db.Model):
         self.description = description
         self.upvotes = None
         self.downvotes = None
+
+def init_db():
+    db.create_all()
+
+    # Create a test user
+    new_user = User('a@a.com', 'aaaaaaaa')
+    new_user.display_name = 'Nathan'
+    db.session.add(new_user)
+    db.session.commit()
+
+    new_user.datetime_subscription_valid_until = datetime.datetime(2019, 1, 1)
+    db.session.commit()
+
+
+if __name__ == '__main__':
+    init_db()
