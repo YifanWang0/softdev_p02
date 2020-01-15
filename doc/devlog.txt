@@ -95,3 +95,7 @@ added relevant photo and description to homepage
 
 clementC -- 2020-01-15 8:36
 fixed modals not passing data
+
+emilyZ -- 2020-01-15 11:35
+implemented frontend and backend for viewing tasks for the day.
+edited home to only allow for log in and sign up if not logged in.

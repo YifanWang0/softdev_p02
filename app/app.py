@@ -113,6 +113,7 @@ def day():
     else:
         today = datetime.today()
         weekday = today.weekday()
+        tasks = {}
         personal_tasks = {}
         group_tasks = {}
         for (day in range(weekday,7)):
@@ -122,6 +123,9 @@ def day():
                                                           due_date_d = int(today.strftime('%d')),
                                                           ).all()
         for (group in current_user.groups):
+            group_tasks[group.name] = Task.query.filter_by(group_id = group.id
+
+                                                                )
 
         return render_template('day.html', personal_tasks = personal_tasks)
 
