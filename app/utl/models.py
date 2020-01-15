@@ -10,7 +10,7 @@ class GroupLinks(db.Model): #this is automatically created when you append users
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
-    credibility = db.Column(db.Integer)
+    credibility = db.Column(db.Integer, nullable = False)
 
     user = db.relationship('User', backref='groupownership')
     group = db.relationship('Group', backref='groupownership')
@@ -18,6 +18,7 @@ class GroupLinks(db.Model): #this is automatically created when you append users
     def __init__(self, user_id, group_id):
         self.user_id = user_id
         self.group_id = group_id
+        self. credibility = 100
 
 class User(db.Model, UserMixin):
     # columns

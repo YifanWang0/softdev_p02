@@ -206,12 +206,16 @@ def addEvent():
 
 @app.route('/joinGroup', methods=['GET', 'POST'])
 def joinGroup():
-    if 'group_name' in request.form.keys():
+    if 'name' in request.form.keys() and 'description' in request.form.keys():
         Group.query.filter_by(id = int(request.form['group_name']))
 
 @app.route('/createGroup', methods=['GET', 'POST'])
 def createGroup():
-    return render_template("creategroup.html")
+    if 'name' in request.form.keys() and 'description' in request.form.keys():
+        group = Group(request.form['name'],current_user.id, request.form['description'])
+        current_user.append(group)
+        db.session.add(group)
+        db.session.commit()
 if __name__ == "__main__":
     app.debug = True
     app.run()

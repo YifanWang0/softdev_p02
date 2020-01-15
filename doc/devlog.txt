@@ -81,3 +81,10 @@ started writing search
 
 josephL --2020-01-14 22:06
 added many functions like joining group and making tasks but largeyl unfinished
+
+josephL --2020-01-15 00:05
+creating functions like:
+create group
+join group
+create task
+and adding more modal forms
