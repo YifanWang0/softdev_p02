@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, session, render_template, flash, redirect, url_for, request
+from flask import Flask, Blueprint, session, render_template, flash, redirect, url_for, request, flash
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 
 from utl.forms import SignUpForm, LogInForm, SearchForm
@@ -109,9 +109,9 @@ def day():
         today = datetime.today()
         personal_tasks = Task.query.filter_by(user_id = current_user.id,
                                               group_id = None,
-                                              due_date_m = int(today.stfrtime('%m')),
-                                              due_date_dd = int(today.stfrtime('%m')),
-                                              due_date_hr = int(today.stfrtime('%m'))
+                                              due_date_m = int(today.strftime('%m')),
+                                              due_date_dd = int(today.strftime('%d')),
+                                              due_date_hr = int(today.strftime('%H'))
                                               )
         return render_template('day.html')
 
@@ -128,74 +128,60 @@ def month():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
-    @login_required
-    def search():
 
-        SEARCH_LIMIT = 100
-        PER_ROW = 3
+    form = SearchForm()
 
-        form = SearchForm()
+    results = None
 
-        full_results = None
+    if form.validate_on_submit():
+        results = []
 
-        if form.validate_on_submit():
-            results = Group.query.filter(
-                Group.name.like('%{}%'.format(form.search.data))).all()
+        if form.data['search'] == '':
+            qry = db_session.query(Album)
+            results = qry.all()
 
-            sales = Sale.query.all()
-            all_ids = set([i.card_id for i in sales])
+        if not results:
+            flash('No results found!')
 
-            results = [i for i in results if i.id in all_ids]
+    return render_template('search.html',
+                           form=form,
+                           query=form.search.data,
+                           results=results)
 
-            # cut results off
-            results = results[:SEARCH_LIMIT]
-
-            # pad results
-            while len(results) % PER_ROW != 0:
-                results.append(None)
-
-            full_results = []
-
-            print(full_results)
-
-            for i in range(len(results) // PER_ROW):
-                full_results.append(results[i * PER_ROW:(i + 1) * PER_ROW])
-        else:
-            form.rarities.data = []
-            form.types.data = []
-
-        return render_template('search.html',
-                               form=form,
-                               query=form.search.data,
-                               limit=SEARCH_LIMIT,
-                               results=full_results)
-
-
+@login_required
 @app.route('/requests', methods=['GET', 'POST'])
 def requests():
     return render_template('requests.html')
 
+@login_required
 @app.route('/myGroups', methods=['GET','POST'])
 def myGroups():
     Group.query.filter_by()
     return render_template('mygroups.html')
+
+
 @app.route('/leaveGroup', methods=['GET', 'POST'])
-def leaveGroup(group_id):
-    current_user
+def leaveGroup():
+    return "yo"
+
 @app.route('/deleteTask', methods=['GET', 'POST'])
 @app.route('/editTask', methods=['GET', 'POST'])
 @app.route('/editGroup', methods=['GET', 'POST'])
 @app.route('/Requests', methods=['GET'])
 @app.route('/Requests', methods=['POST'])
 
-
-@app.route('/addTask', methods=['GET', 'POST'])
+@app.route('/addTask', methods=['GET','POST'])
 def addTask():
-    if 'title' in request.form.keys() and 'description' in request.form.keys() and 'date'in request.form.keys():
+    print(request.form['title'])
+    if 'title' in request.form.keys() and 'description' in request.form.keys() and 'date'in request.form.keys() and 'time' in request.form.keys():
+        print("YOO")
         date = request.form['date'].split("/")
+        time = request.form['time'].split(":")
         month = int(date[0])
         day = int(date[1])
-        task = Task(month,day,0,request.form['title'], request.form['description'])
+        hour = int(time[0])
+        min = int(time[1])
+        task = Task(month,day,hour,min,0,request.form['title'], request.form['description'])
         current_user.tasks.append(task)
         db.session.add(task)
         db.session.commit()
@@ -203,14 +189,29 @@ def addTask():
 
 @app.route('/addEvent', methods=['GET', 'POST'])
 def addEvent():
-    return "add task"
+    print(request.form['title'])
+    if 'title' in request.form.keys() and 'description' in request.form.keys() and 'date'in request.form.keys() and 'time' in request.form.keys():
+        print("YOO")
+        date = request.form['date'].split("/")
+        time = request.form['time'].split(":")
+        month = int(date[0])
+        day = int(date[1])
+        hour = int(time[0])
+        min = int(time[1])
+        task = Task(month,day,hour,min,0,request.form['title'], request.form['description'])
+        current_user.tasks.append(task)
+        db.session.add(task)
+        db.session.commit()
+    return "add event"
 
 @app.route('/joinGroup', methods=['GET', 'POST'])
 def joinGroup():
-    if 'group name' in title.form.keys():
-        Group.query.filter_by(id = 2)
+    if 'group_name' in request.form.keys():
+        Group.query.filter_by(id = int(request.form['group_name']))
 
-
+@app.route('/createGroup', methods=['GET', 'POST'])
+def createGroup():
+    return render_template("creategroup.html")
 if __name__ == "__main__":
     app.debug = True
     app.run()

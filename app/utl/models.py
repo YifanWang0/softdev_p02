@@ -41,13 +41,15 @@ class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     admin_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     name = db.Column(db.String(80), unique=True, nullable=False)
+    description = db.Column(db.String(80), nullable=False)
     #relationships
     tasks = db.relationship('Task', backref='group')
     users = association_proxy('groupownership',
                               'user',
                               creator=lambda u: GroupLinks(u.id, id))
-    def __init__(self, name, user_id):
+    def __init__(self, name, user_id, description):
         self.name = name
+        self.description = description
         self.admin_id = user_id
 
 class Task(db.Model):
@@ -72,6 +74,17 @@ class Task(db.Model):
     def __init__(self, month, day, priority, title, description):
         self.due_date_m = month
         self.due_date_dd = day
+        self.priority = priority
+        self.title = title
+        self.description = description
+        self.upvotes = None
+        self.downvotes = None
+
+    def __init__(self, month, day, hour, min, priority, title, description):
+        self.due_date_m = month
+        self.due_date_dd = day
+        self.due_date_hr = hour
+        self.due_date_mm = min
         self.priority = priority
         self.title = title
         self.description = description

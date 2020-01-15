@@ -108,7 +108,7 @@
             <div class="modal-body">
                 <div class="card">
                     <div class="card-body">
-                        <form action="/addTask">
+                        <form action="{{ url_for('addTask') }}" method = "get">
                             <div class="form-group">
                                 Task Name
                                 <input class="form-control-sm card-title" type="text" name="title"
@@ -119,8 +119,12 @@
                                 <input class="form-control-sm" type="text" name="description" placeholder="Description" required><br><br>
                             </div>
                             <div class="form-group">
-                                <label class="control-label" for="date">Due</label>
+                                <label class="control-label" for="date">Due Date</label>
                                 <input class="form-control-sm" id="date" name="date" placeholder="MM/DD" type="text" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="date">Due Time</label>
+                                <input class="form-control-sm" id="date" name="time" placeholder="HR:MIN" type="text" required>
                             </div>
                             <button class="btn btn-primary" type="submit">Add Task</button>
                         </form>
@@ -146,7 +150,7 @@
             <div class="modal-body">
                 <div class="card">
                     <div class="card-body">
-                        <form action="/addEvent">
+                        <form action= "{{ url_for('addEvent') }}" method = "get">
                             <div class="form-group">
                                 Event Name
                                 <input class="form-control-sm card-title" type="text" name="title"
@@ -157,8 +161,12 @@
                                 <input class="form-control-sm" type="text" name="description" placeholder="Description" required><br><br>
                             </div>
                             <div class="form-group">
-                                <label class="control-label" for="date">Date</label>
+                                <label class="control-label" for="date">Event Date</label>
                                 <input class="form-control-sm" id="date" name="date" placeholder="MM/DD" type="text" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="date">Event Time</label>
+                                <input class="form-control-sm" id="date" name="time" placeholder="HR/MIN" type="text" required>
                             </div>
                             <button class="btn btn-primary" type="submit">Add Event</button>
                         </form>

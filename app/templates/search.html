@@ -15,9 +15,50 @@
 
 {% block content %}
 <div class="title">
-    <h1>Search for a group to join</h1>
-    <div><a class="btn btn-outline-primary" href={{ url_for('createGroup') }} role="button">Create Group</a></div>
+    <h1>Search for groups!</h1>
 </div>
+<br><!-- Button trigger modal -->
+<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+  Create Group
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Create Group</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{{ url_for('createGroup') }}" method = "get">
+                        <div class="form-group">
+                            Group Name
+                            <input class="form-control-sm card-title" type="text" name="title"
+                                   placeholder="Title" required><br>
+                        </div>
+                        <div class="form-group">
+                            Description
+                            <input class="form-control-sm" type="text" name="description" placeholder="Description" required><br><br>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Create Group</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+
 
 
 <hr>
@@ -34,33 +75,16 @@
 
 <p>Search results for: {{ query }}</p>
 
-{% for group_list in results %}
+{% for group in results %}
 
 <div class="row">
-    {% for group in card_list %}
 
     <div class="col">
         {% if group is not none %}
-
-        <div class="card-footer bg-transparent">
-            <form action = {{url_for('user.buyCards')}} method = "POST">
-                {% if in_stock %}
-                <button type="submit" name="card" value="{{ card.id }}"
-                    class="btn btn-primary btn-block">
-                    Buy
-                {% else %}
-                <button type="button" class="btn btn-secondary btn-block" disabled>
-                    Out of Stock
-                {% endif %}
-                </button>
-            </form>
-        </div>
-        {{render_card(card,True,True,True)}}
+          {{group.name}}
         {% endif %}
 
     </div>
-
-    {% endfor %}
 
 </div><br>
 
@@ -69,7 +93,7 @@
 
 {% if results == [] %}
 <br><br><br>
-<p class="text-center"><em>No cards found!</em></p>
+<p class="text-center"><em>No groups found!</em></p>
 {% endif %}
 
 {% endif %}
