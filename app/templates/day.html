@@ -3,5 +3,6 @@
 {% block content %}
     {% if current_user.is_authenticated %}
       Tasks
+      {{tasks}}
     {% endif %}
 {% endblock %}

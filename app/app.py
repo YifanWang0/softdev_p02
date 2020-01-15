@@ -113,13 +113,7 @@ def day():
                                               due_date_dd = int(today.strftime('%d')),
                                               due_date_hr = int(today.strftime('%H'))
                                               )
-        return render_template('day.html')
-
-
-@app.route('/week', methods=['GET', 'POST'])
-def week():
-    return render_template('week.html')
-
+        return render_template('day.html', tasks='')
 
 @app.route('/month', methods=['GET', 'POST'])
 def month():
@@ -220,7 +214,7 @@ def createGroup():
         Group.query.filter_by(id = 2)
 
 @app.route('/profile', methods=['GET', 'POST'])
-def requests():
+def profile():
     return render_template('profile.html')
 
 if __name__ == "__main__":
