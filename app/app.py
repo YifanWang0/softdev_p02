@@ -115,12 +115,6 @@ def day():
                                               )
         return render_template('day.html')
 
-
-@app.route('/week', methods=['GET', 'POST'])
-def week():
-    return render_template('week.html')
-
-
 @app.route('/month', methods=['GET', 'POST'])
 def month():
     return render_template('month.html')
@@ -223,6 +217,11 @@ def createGroup():
         db.session.add(group)
         db.session.commit()
     return redirect(url_for('search'))
+
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    return render_template('profile.html')
+    
 if __name__ == "__main__":
     app.debug = True
     app.run()
