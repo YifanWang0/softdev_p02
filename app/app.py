@@ -2,7 +2,7 @@ from flask import Flask, Blueprint, session, render_template, flash, redirect, u
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 
 from utl.forms import SignUpForm, LogInForm, SearchForm
-
+from flask_sqlalchemy import SQLAlchemy
 import os, json
 
 from datetime import datetime
@@ -22,6 +22,13 @@ app.config['USE_SESSION_FOR_NEXT'] = True
 keyfile = open('keys.json')
 keys = json.load(keyfile)
 googleCalendar_key = keys['google_calendar']
+
+# start database
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
+
 # set up login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -33,10 +40,6 @@ login_manager.login_message_category = 'danger'
 def load_user(user_id):
     return User.query.get(user_id)
 
-db.init_app(app)
-with app.app_context():
-    db.create_all()
-
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -46,7 +49,7 @@ def index():
 def missing_keys():
     for service in keys:
         if keys[service] == 'YOUR_API_KEY_HERE':
-            flash('Key for {} is missing. See README.md for specific instructions.'.format(service), 'error')
+            flash('Key for {} is missing. See README.md for specific instructions.'.argsat(service), 'error')
     return render_template("home.html")
 
 
@@ -110,7 +113,7 @@ def day():
         personal_tasks = Task.query.filter_by(user_id = current_user.id,
                                               group_id = None,
                                               due_date_m = int(today.strftime('%m')),
-                                              due_date_dd = int(today.strftime('%d')),
+                                              due_date_d = int(today.strftime('%d')),
                                               due_date_hr = int(today.strftime('%H'))
                                               )
         return render_template('day.html', tasks='')
@@ -166,52 +169,58 @@ def leaveGroup():
 
 @app.route('/addTask', methods=['GET','POST'])
 def addTask():
-    print(request.form['title'])
-    if 'title' in request.form.keys() and 'description' in request.form.keys() and 'date'in request.form.keys() and 'time' in request.form.keys():
+    print(request.args)
+    if 'title' in request.args and 'description' in request.args and 'date'in request.args and 'time' in request.args:
         print("YOO")
-        date = request.form['date'].split("/")
-        time = request.form['time'].split(":")
+        date = request.args['date'].split("/")
+        time = request.args['time'].split(":")
         month = int(date[0])
         day = int(date[1])
         hour = int(time[0])
         min = int(time[1])
-        task = Task(month,day,hour,min,0,request.form['title'], request.form['description'])
+        task = Task(current_user.id,month,day,hour,min,0,request.args['title'], request.args['description'])
         current_user.tasks.append(task)
         db.session.add(task)
         db.session.commit()
-    return "add task"
+    return redirect(url_for('day'))
 
 @app.route('/addEvent', methods=['GET', 'POST'])
 def addEvent():
-    print(request.form['title'])
-    if 'title' in request.form.keys() and 'description' in request.form.keys() and 'date'in request.form.keys() and 'time' in request.form.keys():
+    print(request.args['title'])
+    if 'title' in request.args and 'description' in request.args and 'date'in request.args and 'time' in request.args:
         print("YOO")
-        date = request.form['date'].split("/")
-        time = request.form['time'].split(":")
+        date = request.args['date'].split("/")
+        time = request.args['time'].split(":")
         month = int(date[0])
         day = int(date[1])
         hour = int(time[0])
         min = int(time[1])
-        task = Task(month,day,hour,min,0,request.form['title'], request.form['description'])
-        current_user.tasks.append(task)
+        task = Task(current_user.id,month,day,hour,min,0,request.args['title'],request.args['description'])
+        #current_user.tasks.append(task)
         db.session.add(task)
         db.session.commit()
-    return "add event"
+    return redirect(url_for('day'))
 
 @app.route('/joinGroup', methods=['GET', 'POST'])
 def joinGroup():
-    if 'name' in request.form.keys() and 'description' in request.form.keys():
-        Group.query.filter_by(id = int(request.form['group_name']))
+    if 'name' in request.args and 'description' in request.args:
+        Group.query.filter_by(id = int(request.args['group_name']))
 
-@app.route('/createGroup', methods=['GET', 'POST'])
+@app.route('/createGroup', methods=['GET'])
+def createGroupForm():
+    return render_template('creategroup.html')
+
+@app.route('/createGroup', methods=['POST'])
 def createGroup():
-    if 'name' in request.form.keys() and 'description' in request.form.keys():
-        group = Group(request.form['name'],current_user.id, request.form['description'])
+    print(request.args)
+    print(request.form.keys())
+    if 'title' in request.args and 'description' in request.args:
+        print("YOOO")
+        group = Group(request.args['title'],current_user.id, request.args['description'])
         current_user.append(group)
         db.session.add(group)
         db.session.commit()
-    if 'group name' in title.form.keys():
-        Group.query.filter_by(id = 2)
+    return redirect(url_for('search'))
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
