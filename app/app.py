@@ -22,6 +22,13 @@ app.config['USE_SESSION_FOR_NEXT'] = True
 keyfile = open('keys.json')
 keys = json.load(keyfile)
 googleCalendar_key = keys['google_calendar']
+
+# start database
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
+
 # set up login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -32,10 +39,6 @@ login_manager.login_message_category = 'danger'
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
-
-#database
-db = SQLAlchemy(app)
-db.app = app
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -110,7 +113,7 @@ def day():
         personal_tasks = Task.query.filter_by(user_id = current_user.id,
                                               group_id = None,
                                               due_date_m = int(today.strftime('%m')),
-                                              due_date_dd = int(today.strftime('%d')),
+                                              due_date_d = int(today.strftime('%d')),
                                               due_date_hr = int(today.strftime('%H'))
                                               )
         return render_template('day.html')
@@ -179,7 +182,7 @@ def addTask():
         current_user.tasks.append(task)
         db.session.add(task)
         db.session.commit()
-    return "add task"
+    return redirect(url_for('day'))
 
 @app.route('/addEvent', methods=['GET', 'POST'])
 def addEvent():
@@ -192,11 +195,11 @@ def addEvent():
         day = int(date[1])
         hour = int(time[0])
         min = int(time[1])
-        task = Task(month,day,hour,min,0,request.args['title'], request.args['description'])
+        task = Task(current_user.id,month,day,hour,min,0,request.args['title'],request.args['description'])
         current_user.tasks.append(task)
         db.session.add(task)
         db.session.commit()
-    return "add event"
+    return redirect(url_for('day'))
 
 @app.route('/joinGroup', methods=['GET', 'POST'])
 def joinGroup():
@@ -210,6 +213,7 @@ def createGroupForm():
 @app.route('/createGroup', methods=['POST'])
 def createGroup():
     print(request.args)
+    print(request.form.keys())
     if 'title' in request.args and 'description' in request.args:
         print("YOOO")
         group = Group(request.args['title'],current_user.id, request.args['description'])
@@ -221,7 +225,7 @@ def createGroup():
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     return render_template('profile.html')
-    
+
 if __name__ == "__main__":
     app.debug = True
     app.run()

@@ -56,10 +56,12 @@ class Group(db.Model):
 class Task(db.Model):
     #columns
     id = db.Column(db.Integer,primary_key=True)
+    user_id = db.Column(db.ForeignKey('user.id'), nullable = False)
+    group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
     due_date_m = db.Column(db.Integer, nullable = False)
-    due_date_dd = db.Column(db.Integer, nullable = False)
+    due_date_d = db.Column(db.Integer, nullable = False)
     due_date_hr = db.Column(db.Integer)
-    due_date_mm = db.Column(db.Integer)
+    due_date_m = db.Column(db.Integer)
     priority = db.Column(db.Integer, nullable = False)
     timestamp = db.Column(db.DateTime, nullable=False,
                                        default=datetime.utcnow)
@@ -67,24 +69,15 @@ class Task(db.Model):
     description = db.Column(db.String(80), nullable=False)
     upvotes = db.Column(db.Integer)
     downvotes = db.Column(db.Integer)
-    #relationships
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False) #this is created when you append a task to a person
-    group_id = db.Column(db.Integer, db.ForeignKey('group.id'))#this is created when append a task to a group)
 
-    def __init__(self, month, day, hour, min, priority, title, description):
+    def __init__(self, user_id, month, day, hour, min, priority, title):
+        self.user_id = user_id
         self.due_date_m = month
-        self.due_date_dd = day
+        self.due_date_d = day
         self.due_date_hr = hour
-        self.due_date_mm = min
+        self.due_date_m = min
         self.priority = priority
         self.title = title
-        self.description = description
+        self.description = "f"
         self.upvotes = None
         self.downvotes = None
-
-def init_db():
-    db.create_all()
-
-
-if __name__ == '__main__':
-    init_db()
