@@ -73,21 +73,25 @@ added creating task function
 clementC -- 2020-01-13 8:32
 copied forms into modals
 
-josephL --2020-01-14 10:29
+josephL -- 2020-01-14 10:29
 created join group html form
 
-josephL --2020-01-14 15:26
+josephL -- 2020-01-14 15:26
 started writing search
 
-josephL --2020-01-14 22:06
+josephL -- 2020-01-14 22:06
 added many functions like joining group and making tasks but largeyl unfinished
 
-josephL --2020-01-15 00:05
+josephL -- 2020-01-15 00:05
 creating functions like:
 create group
 join group
 create task
 and adding more modal forms
 
-emilyZ --2020-01-15 00:11
+emilyZ -- 2020-01-15 00:11
 added relevant photo and description to homepage
+
+
+clementC -- 2020-01-15 8:36
+fixed modals not passing data
