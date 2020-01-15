@@ -78,3 +78,6 @@ created join group html form
 
 josephL --2020-01-14 15:26
 started writing search
+
+josephL --2020-01-14 22:06
+added many functions like joining group and making tasks but largeyl unfinished
