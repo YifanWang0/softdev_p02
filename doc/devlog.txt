@@ -88,3 +88,6 @@ create group
 join group
 create task
 and adding more modal forms
+
+emilyZ --2020-01-15 00:11
+added relevant photo and description to homepage
