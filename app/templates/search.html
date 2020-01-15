@@ -15,13 +15,19 @@
 
 {% block content %}
 <div class="title">
-    <h1>Search for groups!</h1>
-    <div><a class="btn btn-outline-primary" href={{ url_for('createGroupForm') }} role="button">Create a group</a></div>
+  <br>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm"></div>
+        <h1>Search for groups!</h1>
+      <div class="col-sm"></div>
+        <br><!-- Button trigger modal -->
+        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+          Create Group
+        </button>
+    </div>
+  </div>
 </div>
-<br><!-- Button trigger modal -->
-<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
-  Create Group
-</button>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -37,15 +43,15 @@
         <div class="modal-body">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ url_for('createGroup') }}" method = "get">
+                    <form action="{{ url_for('createGroup') }}" method = "post">
                         <div class="form-group">
                             Group Name
-                            <input class="form-control-sm card-title" type="text" name="title"
-                                   placeholder="Title" required><br>
+                            <input class="form-control-sm card-title" type="text" name="name"
+                                   placeholder="Software Development" required><br>
                         </div>
                         <div class="form-group">
                             Description
-                            <input class="form-control-sm" type="text" name="description" placeholder="Description" required><br><br>
+                            <input class="form-control-sm" type="text" name="description" placeholder="A Senior CS Class in Stuy" required><br><br>
                         </div>
                         <button class="btn btn-primary" type="submit">Create Group</button>
                     </form>
@@ -63,40 +69,47 @@
 
 
 <hr>
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+        <form method="POST">
+            {{ form.csrf_token }}
 
-<form method="POST">
-    {{ form.csrf_token }}
+            {{ form_field(form.search) }}
+            {{ form_field(form.submit) }}
+        </form>
+      </div>
+  </div>
+  {% if results is not none %}
 
-    {{ form_field(form.search) }}
-    <br><br>
-    {{ form_field(form.submit) }}
-</form>
-
-{% if results is not none %}
-
-<p>Search results for: {{ query }}</p>
-
-{% for group in results %}
-
-<div class="row">
-
-    <div class="col">
-        {% if group is not none %}
-          {{group.name}}
-        {% endif %}
-
+    <div class="row">
+      <div class="col-sm">
+          <p>Search results for: {{ query }}</p>
+      </div>
     </div>
 
-</div><br>
+    {% for group in results %}
+      <div class="row">
+        <div class = "col-sm">
+          <div class="card">
+              <div class="card-body">
+                  {% if group is not none %}
+                    {{group.name}}
+                  {% endif %}
+              </div>
+          </div>
+        </div>
+      </div><br>
+    {% endfor %}
 
+    {% if results == [] %}
+    <br><br><br>
+    <p class="text-center"><em>No groups found!</em></p>
+    {% endif %}
 
-{% endfor %}
+  {% endif %}
 
-{% if results == [] %}
-<br><br><br>
-<p class="text-center"><em>No groups found!</em></p>
-{% endif %}
+</div>
 
-{% endif %}
 
 {% endblock %}

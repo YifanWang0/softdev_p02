@@ -107,28 +107,28 @@ def logout():
 
 @app.route('/day', methods=['GET', 'POST'])
 def day():
-    if 'user_id' not in session:
-        flash('You must log in to access this page', 'warning')
-        return redirect(url_for('index'))
-    else:
-        today = datetime.today()
-        weekday = today.weekday()
-        tasks = {}
-        personal_tasks = {}
-        group_tasks = {}
-        for (day in range(weekday,7)):
-            personal_tasks[day] = Task.query.filter_by(user_id = current_user.id,
-                                                          group_id = None,
-                                                          due_date_m = int(today.strftime('%m')),
-                                                          due_date_d = int(today.strftime('%d')),
-                                                          ).all()
-        for (group in current_user.groups):
-            group_tasks[group.name] = Task.query.filter_by(group_id = group.id
-
-                                                                )
-
-        return render_template('day.html', personal_tasks = personal_tasks)
-
+    # if 'user_id' not in session:
+    #     flash('You must log in to access this page', 'warning')
+    #     return redirect(url_for('index'))
+    # else:
+    #     today = datetime.today()
+    #     weekday = today.weekday()
+    #     tasks = {}
+    #     personal_tasks = {}
+    #     group_tasks = {}
+    #     for (day in range(weekday,7)):
+    #         personal_tasks[day] = Task.query.filter_by(user_id = current_user.id,
+    #                                                       group_id = None,
+    #                                                       due_date_m = int(today.strftime('%m')),
+    #                                                       due_date_d = int(today.strftime('%d')),
+    #                                                       ).all()
+    #     for (group in current_user.groups):
+    #         group_tasks[group.name] = Task.query.filter_by(group_id = group.id
+    #
+    #                                                             )
+    #
+    #     return render_template('day.html', personal_tasks = personal_tasks)
+    return 1;
 @app.route('/month', methods=['GET', 'POST'])
 def month():
     return render_template('month.html')
@@ -143,11 +143,13 @@ def search():
 
     if form.validate_on_submit():
         results = []
-
-        if form.data['search'] == '':
-            qry = db_session.query(Album)
-            results = qry.all()
-
+        search_string = form.search.data
+        if search_string:
+            if search_string == '':
+                results = Group.query.all()
+            else:
+                results = Group.query.filter(
+                    Group.name.like('%{}%'.format(search_string))).all()
         if not results:
             flash('No results found!')
 
@@ -225,10 +227,10 @@ def createGroupForm():
 def createGroup():
     print(request.args)
     print(request.form.keys())
-    if 'title' in request.args and 'description' in request.args:
+    if 'name' in request.form.keys() and 'description' in request.form.keys():
         print("YOOO")
-        group = Group(request.args['title'],current_user.id, request.args['description'])
-        current_user.append(group)
+        group = Group(request.form['name'],current_user.id, request.form['description'])
+        current_user.groups.append(group)
         db.session.add(group)
         db.session.commit()
     return redirect(url_for('search'))
