@@ -61,7 +61,7 @@ class Task(db.Model):
     due_date_m = db.Column(db.Integer, nullable = False)
     due_date_d = db.Column(db.Integer, nullable = False)
     due_date_hr = db.Column(db.Integer)
-    due_date_m = db.Column(db.Integer)
+    due_date_mm = db.Column(db.Integer)
     priority = db.Column(db.Integer, nullable = False)
     timestamp = db.Column(db.DateTime, nullable=False,
                                        default=datetime.utcnow)
@@ -70,14 +70,14 @@ class Task(db.Model):
     upvotes = db.Column(db.Integer)
     downvotes = db.Column(db.Integer)
 
-    def __init__(self, user_id, month, day, hour, min, priority, title):
+    def __init__(self, user_id, month, day, hour, min, priority, title, description):
         self.user_id = user_id
         self.due_date_m = month
         self.due_date_d = day
         self.due_date_hr = hour
-        self.due_date_m = min
+        self.due_date_mm = min
         self.priority = priority
         self.title = title
-        self.description = "f"
+        self.description = description
         self.upvotes = None
         self.downvotes = None
