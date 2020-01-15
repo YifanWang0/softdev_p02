@@ -36,6 +36,8 @@ login_manager.login_view = 'auth.login'
 login_manager.login_message = 'Please Log In to view this page!'
 login_manager.login_message_category = 'danger'
 
+days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
@@ -110,13 +112,18 @@ def day():
         return redirect(url_for('index'))
     else:
         today = datetime.today()
-        personal_tasks = Task.query.filter_by(user_id = current_user.id,
-                                              group_id = None,
-                                              due_date_m = int(today.strftime('%m')),
-                                              due_date_d = int(today.strftime('%d')),
-                                              due_date_hr = int(today.strftime('%H'))
-                                              )
-        return render_template('day.html')
+        weekday = today.weekday()
+        personal_tasks = {}
+        group_tasks = {}
+        for (day in range(weekday,7)):
+            personal_tasks[day] = Task.query.filter_by(user_id = current_user.id,
+                                                          group_id = None,
+                                                          due_date_m = int(today.strftime('%m')),
+                                                          due_date_d = int(today.strftime('%d')),
+                                                          ).all()
+        for (group in current_user.groups):
+
+        return render_template('day.html', personal_tasks = personal_tasks)
 
 @app.route('/month', methods=['GET', 'POST'])
 def month():
