@@ -62,8 +62,16 @@ josephL -- 2020-01-13 18:59
 fixed app.py, fixed button to show only when logged in
 fixing models
 
+clementC -- 2020-01-13 23:00
+created "create" button
+added popover to the "create" button
+added modals and buttons in the popover
+
 josephL -- 2020-01-14 8:24
 added creating task function
+
+clementC -- 2020-01-13 8:32
+copied forms into modals
 
 josephL --2020-01-14 10:29
 created join group html form
