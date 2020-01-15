@@ -1,0 +1,46 @@
+{% extends '_base.html' %}
+
+{% block style %}
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    }
+    .bootstrap-select:hover .filter-option {
+        color: #fff !important;
+    }
+    .show .filter-option{
+        color: #fff !important;
+    }
+    .bootstrap-select .dropdown-toggle[title="Select a Group"] .filter-option{
+        color: #999999;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Sell a Card</h1>
+    <hr>
+    <form method="post" action={{ url_for('user.sell') }}>
+        <div class="form-group">
+            <label for="card">Card</label><br>
+            <select id="card" name="card" class="selectpicker" data-live-search="true" data-style="btn-outline-primary" title="Select a Card" required>
+                {% for card in current_user.cards %}
+                    <option title="{{ card.name }}" data-tokens={{ card.name }} data-content="<img src={{ card.image_small }} style='height:50%'>">
+                        {{ card.id }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="price">Price</label>
+            <div class="input-group" style="width:25%">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="dollar-sign">$</span>
+                </div>
+                <input class="form-control" type="number" step=".01" name="price" id="price" placeholder="0.00" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Sell</button>
+    </form>
+{% endblock %}

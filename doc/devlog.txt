@@ -44,6 +44,43 @@ fixed app.py reformatting issues
 clementC -- 2020-01-10 8:23
 fixed jsonDecodeError
 
+josephL -- 2020-01-10 19:12
+added mygroups path and html
+
+josephL -- 2020-01-11 15:23
+developing relationships in models.py
+finding ways to implement credibility
+
 emilyZ -- 2020-01-12 21:50
 added routes and templates for navbar
 implemented basic add task template for frontend
+
+josephL -- 2020-01-13 9:26
+created tasks and groups relationship models
+
+josephL -- 2020-01-13 18:59
+fixed app.py, fixed button to show only when logged in
+fixing models
+
+clementC -- 2020-01-13 23:00
+created "create" button
+added popover to the "create" button
+added modals and buttons in the popover
+
+josephL -- 2020-01-14 8:24
+added creating task function
+
+clementC -- 2020-01-13 8:32
+copied forms into modals
+
+josephL --2020-01-14 10:29
+created join group html form
+
+josephL --2020-01-14 15:26
+started writing search
+
+josephL --2020-01-14 22:06
+added many functions like joining group and making tasks but largely unfinished
+
+emilyZ --2020-01-15 00:11
+added relevant photo and description to homepage
