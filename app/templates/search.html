@@ -4,10 +4,16 @@
 
 {% block style %}
 <style>
-    .no-bullets ul {
-        list-style-type: none;
-        display: inline-block;
-    }
+    .btn-static {
+        background-color: white;
+        border: 1px solid lightgrey;
+        cursor: default;
+      }
+    .btn-static:active {
+        -moz-box-shadow:    inset 0 0 0px white;
+        -webkit-box-shadow: inset 0 0 0px white;
+        box-shadow:         inset 0 0 0px white;
+      }
 </style>
 
 {% endblock style %}
@@ -95,9 +101,13 @@
               <div class="card-body">
                   {% if group is not none %}
                     {{group.name}}
-                    <form action="{{ url_for('joinGroup',group_id = group.id) }}" method = "post">
-                      <button class="btn btn-outline-primary float-right" type="submit">Join Group</button>
-                    </form>
+                    {% if group in current_user.groups %}
+                      <button class="btn btn-outline-primary float-right" disabled>Joined</button>
+                    {% else %}
+                      <form action="{{ url_for('joinGroup',group_id = group.id) }}" method = "post">
+                        <button class="btn btn-primary float-right" type="submit">Join Group</button>
+                      </form>
+                    {% endif %}
                   {% endif %}
               </div>
           </div>
