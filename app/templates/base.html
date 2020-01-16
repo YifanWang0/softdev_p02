@@ -45,10 +45,10 @@
     {% if current_user.is_authenticated %}
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('day') }}">Today</a>
+            <a class="nav-link" href="{{ url_for('day') }}">Daily</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('month') }}">Month</a>
+            <a class="nav-link" href="{{ url_for('month') }}">Monthly</a>
         </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -78,13 +78,13 @@
 </nav>
 {{ render_flashes() }}
 {% if current_user.is_authenticated %}
-    <div id="form button" style="position: fixed; bottom:2%; right: 2%;">
+  <div id="form button" style="position: fixed; bottom: 2%; right: 2%;">
       <button class="btn btn-primary" role="button" data-toggle="popover" data-trigger="focus"
               data-html="true" data-placement="top" title="Create New">
           Create
       </button>
-</div>
-</body>
+
+  </div>
   <div id="taskModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
           <!-- Modal content-->
@@ -196,7 +196,7 @@
 {% block content %}
 
 {% endblock content %}
-
+</body>
 
 
 </html>

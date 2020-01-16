@@ -5,9 +5,28 @@ from utl.forms import SignUpForm, LogInForm, SearchForm
 from flask_sqlalchemy import SQLAlchemy
 import os, json
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from utl.models import db, User, Group, GroupLinks, Task
+
+'''
+from googleapiclient.discovery import build
+from httplib2 import Http
+from oauth2client import file, client, tools
+
+try:
+    import argparse
+    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+except ImportError:
+    flags = None
+
+SCOPES = 'https://www.googleapis.com/auth/calendar'
+store = file.Storage('storage.json')
+creds = store.get()
+if not creds or creds.invalid:
+    flow = client.flow_from_clientsecrets('client_secrets.json', SCOPES)
+    creds = tools.run_flow(flow, store, flags)
+'''
 
 app = Flask(__name__)
 
@@ -36,7 +55,7 @@ login_manager.login_view = 'auth.login'
 login_manager.login_message = 'Please Log In to view this page!'
 login_manager.login_message_category = 'danger'
 
-days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -129,22 +148,81 @@ def day():
             group_tasks[days[day]][group.name] = Task.query.filter_by(group_id = group.id,
                                                             due_date_m = int(today.strftime('%m')),
                                                             due_date_d=int(today.strftime('%d')) + day - weekday).all()
+<<<<<<< HEAD
 
     return render_template('week.html', personal_tasks = personal_tasks, group_tasks = group_tasks)
+=======
+    return render_template('day.html', personal_tasks = personal_tasks, group_tasks = group_tasks)
+>>>>>>> 17e20a840f5731212e39a704b045cbe278dc98d3
 
 @login_required
 @app.route('/month', methods=['GET', 'POST'])
 def month():
+    today = datetime.today()
+    weekday = today.weekday()
+    print(genWeek(getWeek(today,weekday,0)))
+    print(today + timedelta(0))
     firstRow=[0,1,2,3,4,5,6]
     secondRow=[7,8,9,10,11,12,13]
     thirdRow=[14,15,16,17,18,19,20]
     fourthRow=[21,22,23,24,25,26,28]
     data=[]
-    data.append(firstRow)
-    data.append(secondRow)
-    data.append(thirdRow)
-    data.append(fourthRow)
-    return render_template('month.html', first=firstRow, second=secondRow,third=thirdRow,fourth=fourthRow,data=data)
+    data.append(genWeek(getWeek(today,weekday,0)))
+    data.append(genWeek(getWeek(today,weekday,1)))
+    data.append(genWeek(getWeek(today,weekday,2)))
+    data.append(genWeek(getWeek(today,weekday,3)))
+    return render_template('month.html', data=data,month=today.strftime('%B'))
+
+def getWeek(today,weekday,weekIncrem):
+    personal_tasks = {}
+    group_tasks = {}
+    today=today+timedelta(7*weekIncrem)
+    if weekday != 0:
+        if weekday !=6:
+            personal_tasks[days[6] + "," + (today + timedelta(-1-weekday)).strftime('%d')] = []
+        else:
+            personal_tasks[days[6] + "," + today.strftime('%d')] = []
+        group_tasks[days[6]] = []
+        for i in range(0,weekday):
+            personal_tasks[days[i] + "," + (today + timedelta(i-weekday)).strftime('%d')] = []
+            group_tasks[days[i]] = []
+    else:
+        today = today + timedelta(days=(6 - today.weekday() + (7 * weekIncrem)))
+    for day in range(weekday, 6):
+        personal_tasks[days[day] + "," + (today + timedelta(day-weekday)).strftime('%d')] = Task.query.filter_by(user_id=current_user.id,
+                                                         group_id=None,
+                                                         due_date_m=int((today + timedelta(day-weekday)).strftime('%m')),
+                                                         due_date_d=int((today + timedelta(day-weekday)).strftime('%d'))
+                                                         ).all()
+    for day in range(weekday, 7):
+        for group in current_user.groups:
+            if group == None:
+                break
+            group_tasks[days[day]][group.name] = Task.query.filter_by(group_id=group.id,
+                                                                      due_date_m=int(today.strftime('%m')),
+                                                                      due_date_d=int(
+                                                                          today.strftime('%d')) + day - weekday).all()
+    return(personal_tasks,group_tasks)
+
+def genWeek(data):
+    personal_tasks = data[0]
+    group_tasks = data[1]
+    week=[]
+    day={"date","personal1","personal2","event1","event2"}
+    for key in personal_tasks:
+        day=[key.split(",")[1]]
+        temp = []
+        for elem in personal_tasks[key]:
+            temp.append(elem.title)
+        for i in range(0,3):
+            if i < len(temp):
+                day.append(temp[i])
+            else:
+                day.append("*")
+        week.append(day)
+    return week
+
+
 
 @login_required
 @app.route('/search', methods=['GET', 'POST'])
@@ -171,10 +249,39 @@ def search():
                            query=form.search.data,
                            results=results)
 
+## THIS IS NOT THE RIGHT STUFF RN, FROM LAST PROJ
 @login_required
-@app.route('/requests', methods=['GET', 'POST'])
+@app.route("/requests")
 def requests():
-    return render_template('requests.html')
+    recieved = current_user().recieved_pending()
+    counter = 0
+    searchMatches = []
+    try:
+        for person in recieved:
+            if(counter > 45):
+                break
+            info = []
+            userDOB = current_user().dob.split("-")
+            this = util.matchmaker.Person(userDOB[0], userDOB[1], userDOB[2])
+            otherDOB = User.query_by_id(person, "dob").split("-")
+            other = util.matchmaker.Person(otherDOB[0], otherDOB[1], otherDOB[2]) #Person object for other user
+            other_user = User(person)
+            info.append(other_user.name)
+            info.append(round((util.matchmaker.personalityCompatibility(this, other))*100))
+            info.append(round((util.matchmaker.sexualCompatibility(this, other))*100))
+            info.append(round((util.matchmaker.inLawsCompatibility(this, other))*100))
+            info.append(round((util.matchmaker.futureSuccess(this, other))*100))
+            info.append(other_user.bio)
+            info.append(person)
+            info.append(round(current_user().user_dist(person)))
+            info.append(other_user.get_starsign().capitalize())
+            info.append(starsign_compatibilites[current_user().get_starsign()][other_user.get_starsign()])
+            counter += 1
+            searchMatches.append(info)
+    except Exception as e:
+        print(e)
+    session["prev_url"]= "/requests/recieved"
+    return render_template("requests.html", listings=searchMatches)
 
 @login_required
 @app.route('/myGroups', methods=['GET','POST'])
@@ -240,19 +347,13 @@ def joinGroup(group_id):
     flash('You\'ve successfully joined the group!','success')
     return redirect(url_for('search'))
 
-
-@login_required
-@app.route('/createGroup', methods=['GET'])
-def createGroupForm():
-    return render_template('creategroup.html')
-
 @login_required
 @app.route('/createGroup', methods=['POST'])
 def createGroup():
     print(request.form.keys())
-    if 'name' in request.form.keys() and 'description' in request.form.keys():
+    if 'name' in request.form.keys() and 'description' in request.form.keys() and 'private' in request.form.keys():
         print("YOOO")
-        group = Group(request.form['name'],current_user.id, request.form['description'])
+        group = Group(request.form['name'], current_user.id, request.form['description'], request.form['private'])
         current_user.groups.append(group)
         db.session.add(group)
         db.session.commit()
@@ -274,12 +375,7 @@ def editTask():
 @app.route('/editGroup', methods=['GET', 'POST'])
 def editGroup():
     return "f"
-@app.route('/Requests', methods=['GET'])
-def requestsForm():
-    return "f"
-@app.route('/Requests', methods=['POST'])
-def makeRequests():
-    return "f"
+
 if __name__ == "__main__":
     app.debug = True
     app.run()
