@@ -36,7 +36,7 @@ login_manager.login_view = 'auth.login'
 login_manager.login_message = 'Please Log In to view this page!'
 login_manager.login_message_category = 'danger'
 
-days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
+days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -111,27 +111,26 @@ def logout():
 @login_required
 @app.route('/day', methods=['GET', 'POST'])
 def day():
-    # if 'user_id' not in session:
-    #     flash('You must log in to access this page', 'warning')
-    #     return redirect(url_for('index'))
-    # else:
-    #     today = datetime.today()
-    #     weekday = today.weekday()
-    #     tasks = {}
+    today = datetime.today()
+    weekday = today.weekday()
+    tasks = {}
     personal_tasks = {}
-    #     group_tasks = {}
-    #     for (day in range(weekday,7)):
-    #         personal_tasks[day] = Task.query.filter_by(user_id = current_user.id,
-    #                                                       group_id = None,
-    #                                                       due_date_m = int(today.strftime('%m')),
-    #                                                       due_date_d = int(today.strftime('%d')),
-    #                                                       ).all()
-    #     for (group in current_user.groups):
-    #         group_tasks[group.name] = Task.query.filter_by(group_id = group.id
-    #
-    #                                                             )
-    #
-    return render_template('day.html', personal_tasks = personal_tasks)
+    group_tasks = {}
+    for day in range(weekday,7):
+        personal_tasks[days[day]] = Task.query.filter_by(user_id = current_user.id,
+                                                        group_id = None,
+                                                        due_date_m = int(today.strftime('%m')),
+                                                        due_date_d = int(today.strftime('%d')) + day - weekday
+                                                        ).all()
+    for day in range(weekday,7):
+        for group in current_user.groups:
+            if group == None:
+                break
+            group_tasks[days[day]][group.name] = Task.query.filter_by(group_id = group.id,
+                                                            due_date_m = int(today.strftime('%m')),
+                                                            due_date_d=int(today.strftime('%d')) + day - weekday).all()
+
+    return render_template('day.html', personal_tasks = personal_tasks, group_tasks = group_tasks)
 
 @login_required
 @app.route('/month', methods=['GET', 'POST'])
