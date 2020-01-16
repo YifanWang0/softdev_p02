@@ -219,8 +219,8 @@ def requests():
 @login_required
 @app.route('/myGroups', methods=['GET','POST'])
 def myGroups():
-    Group.query.filter_by()
-    return render_template('mygroups.html')
+    return render_template('mygroups.html',
+                            groups = current_user.groups)
 
 @login_required
 @app.route('/leaveGroup', methods=['GET', 'POST'])
@@ -234,10 +234,10 @@ def addTask():
     if 'title' in request.args.keys() and 'description' in request.args.keys() and 'date'in request.args.keys() and 'time' in request.args.keys():
         print("YOO")
         date = request.args['date'].split("/")
-        time = request.args['time'].split(":")
         month = int(date[0])
         day = int(date[1])
-        if 'time' in request.args:
+        if 'time' in request.args and request.args['time'] is not None:
+            time = request.args['time'].split(":")
             hour = int(time[0])
             min = int(time[1])
         task = Task(current_user.id,month,day,hour,min,0,request.args['title'], request.args['description'])
