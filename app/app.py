@@ -136,7 +136,16 @@ def day():
 @login_required
 @app.route('/month', methods=['GET', 'POST'])
 def month():
-    return render_template('month.html')
+    firstRow=[0,1,2,3,4,5,6]
+    secondRow=[7,8,9,10,11,12,13]
+    thirdRow=[14,15,16,17,18,19,20]
+    fourthRow=[21,22,23,24,25,26,28]
+    data=[]
+    data.append(firstRow)
+    data.append(secondRow)
+    data.append(thirdRow)
+    data.append(fourthRow)
+    return render_template('month.html', first=firstRow, second=secondRow,third=thirdRow,fourth=fourthRow,data=data)
 
 @login_required
 @app.route('/search', methods=['GET', 'POST'])
