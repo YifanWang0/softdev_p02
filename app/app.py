@@ -111,26 +111,26 @@ def logout():
 @login_required
 @app.route('/day', methods=['GET', 'POST'])
 def day():
-    # if 'user_id' not in session:
-    #     flash('You must log in to access this page', 'warning')
-    #     return redirect(url_for('index'))
+    if 'user_id' not in session:
+        flash('You must log in to access this page', 'warning')
+        return redirect(url_for('index'))
     # else:
     #     today = datetime.today()
     #     weekday = today.weekday()
     #     tasks = {}
     personal_tasks = {}
-    #     group_tasks = {}
-    #     for (day in range(weekday,7)):
-    #         personal_tasks[day] = Task.query.filter_by(user_id = current_user.id,
-    #                                                       group_id = None,
-    #                                                       due_date_m = int(today.strftime('%m')),
-    #                                                       due_date_d = int(today.strftime('%d')),
-    #                                                       ).all()
-    #     for (group in current_user.groups):
-    #         group_tasks[group.name] = Task.query.filter_by(group_id = group.id
-    #
-    #                                                             )
-    #
+        # group_tasks = {}
+        # for (day in range(weekday,7)):
+        #     personal_tasks[day] = Task.query.filter_by(user_id = current_user.id,
+        #                                                   group_id = None,
+        #                                                   due_date_m = int(today.strftime('%m')),
+        #                                                   due_date_d = int(today.strftime('%d')),
+        #                                                   ).all()
+        # for (group in current_user.groups):
+        #     group_tasks[group.name] = Task.query.filter_by(group_id = group.id
+        #
+        #                                                         )
+
     return render_template('day.html', personal_tasks = personal_tasks)
 
 @login_required
@@ -171,8 +171,8 @@ def requests():
 @login_required
 @app.route('/myGroups', methods=['GET','POST'])
 def myGroups():
-    Group.query.filter_by()
-    return render_template('mygroups.html')
+    return render_template('mygroups.html',
+                            groups = current_user.groups)
 
 @login_required
 @app.route('/leaveGroup', methods=['GET', 'POST'])

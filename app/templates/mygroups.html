@@ -1,8 +1,30 @@
 {% extends "base.html" %}
 
-{% block head %}
-
-{% endblock %}
 {% block content %}
-
+    {% if current_user.is_authenticated %}
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+        <h1>My Groups</h1>
+        </div>
+      </div>
+        {% for group in groups %}
+          {% if group is not none%}
+          <div class = "row">
+            <div class="col-sm">
+              <div class="card" style="width: 50 rem;">
+                  <div class="card-body">
+                      <h5 class="card-title">{{group.name}}</h5>
+                      <form action="{{ url_for('leaveGroup',group_id = group.id) }}" method = "post">
+                        <button class="btn btn-primary float-right" type="submit">Leave Group</button>
+                      </form>
+                      <p class="card-text">{{group.description}}</p>
+                  </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
 {% endblock %}
