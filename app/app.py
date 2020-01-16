@@ -237,6 +237,8 @@ def createGroup():
         current_user.groups.append(group)
         db.session.add(group)
         db.session.commit()
+    # if 'group name' in title.args.keys():
+    #     Group.query.filter_by(id = 2)
     return redirect(url_for('search'))
 
 @login_required
