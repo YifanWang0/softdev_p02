@@ -320,8 +320,8 @@ def addTask():
             min = None
         task = Task(current_user.id,month,day,hour,min,0,request.args['title'], request.args['description'])
         current_user.tasks.append(task)
-        if('group' in request.args and request.args['group'] is not None):
-            group = Group.query.filter_by(id = int(request.args['group']))
+        if('group' in request.args and request.args['group'] != "N/A"):
+            group = Group.query.filter_by(name = request.args['group'])
             group.tasks.append(task)
         db.session.add(task)
         db.session.commit()
@@ -377,14 +377,15 @@ def createGroup():
 @app.route('/deleteTask/<task_id>', methods=['GET', 'POST'])
 def deleteTask(task_id):
     task = Task.query.filter_by(id = task_id).first()
-    current_user.tasks.remove(task)
+    db.session.delete(task)
     db.session.commit()
     flash('You\'ve successfully completed your task', 'success')
-    redirect(url_for('day'))
+    return redirect(url_for('day'))
 
 @app.route('/editTask', methods=['GET', 'POST'])
 def editTask():
     return "f"
+
 @app.route('/editGroup', methods=['GET', 'POST'])
 def editGroup():
     return "f"

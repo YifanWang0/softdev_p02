@@ -119,11 +119,14 @@
                                   <label class="control-label" for="group">Post to a Group?</label>
                                   <select id="group" name="group" class="selectpicker" data-live-search="true" data-style="btn-outline-primary" title="Select a Group">
                                       {% for group in current_user.groups %}
-
-                                          <option title={{ group.id }} data-tokens= {{ group.id}} data-content = {{ group.id}} >
-                                              {{ group.id}}
+                                          {% if group is not none %}
+                                          <option>
+                                              {{ group.name}}
                                           </option>
+                                          {% endif %}
+
                                       {% endfor %}
+                                      <option> N/A </option>
                                   </select>
                               </div>
                               <button class="btn btn-primary" type="submit">Add Task</button>
