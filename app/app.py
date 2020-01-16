@@ -166,8 +166,7 @@ def month():
     data.append(genWeek(getWeek(today,weekday,1)))
     data.append(genWeek(getWeek(today,weekday,2)))
     data.append(genWeek(getWeek(today,weekday,3)))
-    # tempWeek={"date","tasks","events"}
-    return render_template('month.html', data=data)
+    return render_template('month.html', data=data,month=today.strftime('%B'))
 
 def getWeek(today,weekday,weekIncrem):
     personal_tasks = {}
@@ -214,7 +213,7 @@ def genWeek(data):
             if i < len(temp):
                 day.append(temp[i])
             else:
-                day.append("")
+                day.append("*")
         week.append(day)
     return week
 

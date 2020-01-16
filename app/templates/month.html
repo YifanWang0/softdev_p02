@@ -12,27 +12,18 @@
         {#overflow: hidden;#}
         }
 
-        tr {
-            height: 20%;
-        }
-
-        .tCell {
-
-        }
-
         .cellContent {
             height: 150px;
         }
 
-        .cellButton {
-            float: bottom;
-        {#padding-right:20%;#}
-
+        .cellTask{
+            border-bottom:1px solid black;
         }
-    table{
-        min-height: 90%;
-        table-layout: fixed;
-    }
+
+        table {
+            min-height: 90%;
+            table-layout: fixed;
+        }
     </style>
 
 {% endblock %}
@@ -43,6 +34,9 @@
     <div class="container" style="height:inherit">
         <table class="table table-bordered">
             <thead>
+            <tr>
+                <th colspan="7" class="text-center">{{ month }}</th>
+            </tr>
             <tr>
                 <th scope="col">Sun</th>
                 <th scope="col">Mon</th>
@@ -60,14 +54,20 @@
                         <td>
                             <div class="tCell">
                                 <div class="cellContent">
-                                    <div class="cellDate">{{ day[0] }}</div>
-                                    {{ day[1] }}
-                                    <br>
-                                    {{ day[2] }}
-                                    <br>
-                                    {{ day[3] }}
+                                    <div class="cellDate" style="border-bottom:1px solid black;">{{ day[0] }}</div>
+                                    <div class="cellList" style="padding-top:5px">
+                                        <div class="cellTask">
+                                            {{ day[1] }}
+                                        </div>
+                                        <div class="cellTask">
+                                            {{ day[2] }}
+                                        </div>
+                                        <div class="cellTask">
+                                            {{ day[3] }}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="cellButton">
+                                <div class="cellButton" style="float:bottom">
                                     <button style="float:right">View</button>
                                 </div>
                             </div>
