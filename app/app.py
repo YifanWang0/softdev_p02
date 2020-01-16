@@ -130,7 +130,7 @@ def day():
                                                             due_date_m = int(today.strftime('%m')),
                                                             due_date_d=int(today.strftime('%d')) + day - weekday).all()
 
-    return render_template('day.html', personal_tasks = personal_tasks, group_tasks = group_tasks)
+    return render_template('week.html', personal_tasks = personal_tasks, group_tasks = group_tasks)
 
 @login_required
 @app.route('/month', methods=['GET', 'POST'])
@@ -200,8 +200,14 @@ def addTask():
             time = request.args['time'].split(":")
             hour = int(time[0])
             min = int(time[1])
+        else:
+            hour = None
+            min = None
         task = Task(current_user.id,month,day,hour,min,0,request.args['title'], request.args['description'])
         current_user.tasks.append(task)
+        if('group' in request.args and request.args['group'] is not None):
+            group = Group.query.filter_by(id = int(request.args['group']))
+            group.tasks.append(task)
         db.session.add(task)
         db.session.commit()
     return redirect(url_for('day'))

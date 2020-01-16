@@ -32,6 +32,7 @@
             crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/0691185925.js" crossorigin="anonymous"></script>
     <script src="/static/js/myPopover.js"></script>
+
     {% block head %}
 
     {% endblock %}
@@ -112,8 +113,19 @@
                                   <input class="form-control-sm" id="date" name="date" placeholder="MM/DD" type="text" required>
                               </div>
                               <div class="form-group">
-                                  <label class="control-label" for="date">Due Time (Optional)</label>
+                                  <label class="control-label" for="date">Due Time (Optional, in Military Time)</label>
                                   <input class="form-control-sm" id="date" name="time" placeholder="HR:MIN" type="text">
+                              </div>
+                              <div class="form-group">
+                                  <label class="control-label" for="group">Post to a Group?</label>
+                                  <select id="group" name="group" class="selectpicker" data-live-search="true" data-style="btn-outline-primary" title="Select a Group">
+                                      {% for group in current_user.groups %}
+
+                                          <option title={{ group.id }} data-tokens= {{ group.id}} data-content = {{ group.id}} >
+                                              {{ group.id}}
+                                          </option>
+                                      {% endfor %}
+                                  </select>
                               </div>
                               <button class="btn btn-primary" type="submit">Add Task</button>
                           </form>
@@ -156,6 +168,17 @@
                               <div class="form-group">
                                   <label class="control-label" for="date">Event Time (optional)</label>
                                   <input class="form-control-sm" id="date" name="time" placeholder="HR/MIN" type="text">
+                              </div>
+                              <div class="form-group">
+                                  <label class="control-label" for="group">Post to a Group?</label>
+                                  <select id="group" name="group" class="selectpicker" data-live-search="true" data-style="btn-outline-primary" title="Select a Group">
+                                      {% for group in current_user.groups %}
+
+                                          <option title={{ group.id }} data-tokens= {{ group.id}} data-content = {{ group.id}} >
+                                              {{ group.id}}
+                                          </option>
+                                      {% endfor %}
+                                  </select>
                               </div>
                               <button class="btn btn-primary" type="submit">Add Event</button>
                           </form>
