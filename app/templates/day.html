@@ -2,33 +2,109 @@
 
 {% block content %}
     {% if current_user.is_authenticated %}
-        <h1>View Your Tasks</h1>
-        {% for day in personal_tasks %}
-            <h5> {{ day }} </h5>
-            <h6> My Tasks</h6>
-            {% for task in personal_tasks[day] %}
-            <div class="card" style="width: 50 rem;">
+    <div class="container">
+      <div class="row">
+          <div class="col-sm">
+            <h1>View Your Tasks</h1>
+          </div>
+      </div>
+      {% for day in personal_tasks %}
+            <div class = "row">
+              <div class="col-sm">
+                <br>
+                <div class="card bg-info text-white">
+                  <h5> {{ day }} </h5>
+                </div>
+              </div>
+            </div>
+            <div class = "row">
+              <div class="col-sm">
+                <h5> <h6> My Tasks</h6> </h5>
+              </div>
+            </div>
+              {% for task in personal_tasks[day] %}
+                  <div class = "row">
+                    <div class="col-sm">
+                      <div class="card">
+                          <div class="card-body">
+                              <h6 class="card-title">{{task.title}} [  ]
+                                <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#exampleModal">
+                                  Edit Task
+                                </button></h6>
+                              <!-- Button trigger modal -->
+                              <div class="card-text">{{task.description}}
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+              {% endfor %}
+            <div class = "row">
+              <div class="col-sm">
+                <h6> Group Tasks</h6>
+              </div>
+            </div>
+                {% for group in group_tasks[day] %}
+                    <div class = "row">
+                      <div class="col-sm">
+                        {{group}}
+                      </div>
+                    </div>
+                    {% for task in group %}
+                    <div class = "row">
+                      <div class="col-sm">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{task.title}}</h5>
+                                <h6>Due: {{task.due_date_m}}/{{task.due_date_d}}</h6>
+                                <div class="card-text">{{task.description}}
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#exampleModal">
+                                  Edit Task
+                                </button>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+              {% endfor %}
+          {% endfor %}
+    </div>
+    {% endif %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Create Group</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">{{task.title}}</h5> <h6>Due: {{task.due_date_m}}/{{task.due_date_d}}</h6>
-                    <p class="card-text">{{task.description}}</p>
-                    <a href="/edittask" class="btn btn-primary">Edit</a>
+                    <form action="{{ url_for('createGroup') }}" method = "post">
+                        <div class="form-group">
+                            Group Name
+                            <input class="form-control-sm card-title" type="text" name="name"
+                                   placeholder="Software Development" required><br>
+                        </div>
+                        <div class="form-group">
+                            Description
+                            <input class="form-control-sm" type="text" name="description" placeholder="A Senior CS Class in Stuy" required><br><br>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Create Group</button>
+                    </form>
                 </div>
             </div>
-            {% endfor %}
-            <h6> My Group Tasks</h6>
-            {% for group in group_tasks[day] %}
-                {{group}}
-                {% for task in group %}
-                <div class="card" style="width: 50 rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{task.title}}</h5>
-                        <h6>Due: {{task.due_date_m}}/{{task.due_date_d}}</h6>
-                        <p class="card-text">{{task.description}}</p>
-                        <a href="/edittask" class="btn btn-primary">Edit</a>
-                    </div>
-                </div>
-                {% endfor %}
-            {% endfor %}
-        {% endfor %}
-    {% endif %}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
