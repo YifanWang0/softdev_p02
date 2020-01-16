@@ -108,6 +108,9 @@ josephL -- 2020-01-15 17:23
 working on frontend to show information well
 implemented search
 
+clementC -- 2020-01-15 22:48
+fixed search errors and addTask errors
+
 emilyZ == 2020-01-15 23:26
 implemented daily to display every task for the week, first displaying personal tasks, then group tasks.
 edited gitignore to prevent merge conflicts
