@@ -1,8 +1,8 @@
-from flask import Flask, Blueprint, session, render_template, flash, redirect, url_for, request, flash
+from flask import Flask, Blueprint, session, render_template, flash, redirect, url_for, request
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 
 from utl.forms import SignUpForm, LogInForm, SearchForm
-
+from flask_sqlalchemy import SQLAlchemy
 import os, json
 
 from datetime import datetime
@@ -22,6 +22,13 @@ app.config['USE_SESSION_FOR_NEXT'] = True
 keyfile = open('keys.json')
 keys = json.load(keyfile)
 googleCalendar_key = keys['google_calendar']
+
+# start database
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
+
 # set up login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -29,13 +36,11 @@ login_manager.login_view = 'auth.login'
 login_manager.login_message = 'Please Log In to view this page!'
 login_manager.login_message_category = 'danger'
 
+days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
-
-db.init_app(app)
-with app.app_context():
-    db.create_all()
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -46,7 +51,7 @@ def index():
 def missing_keys():
     for service in keys:
         if keys[service] == 'YOUR_API_KEY_HERE':
-            flash('Key for {} is missing. See README.md for specific instructions.'.format(service), 'error')
+            flash('Key for {} is missing. See README.md for specific instructions.'.argsat(service), 'error')
     return render_template("home.html")
 
 
@@ -76,11 +81,14 @@ def login():
     log_in_form = LogInForm()
 
     if log_in_form.validate_on_submit():
+        print("ahh")
         to_validate = User.query.filter_by(username=log_in_form.username.data).first()
 
         if to_validate is None or to_validate.password != log_in_form.password.data:
+            print("BOOO")
             flash('Incorrect username or password!', 'danger')
         else:
+            print("ahhhh")
             login_user(to_validate)
 
             if 'next' in session:
@@ -89,9 +97,10 @@ def login():
                 flash('Logged in successfully!', 'success')
                 return redirect(url_for('day'))
 
+
     return render_template('login.html', form=log_in_form)
 
-
+@login_required
 @app.route('/logout')
 def logout():
     session.clear()
@@ -99,25 +108,37 @@ def logout():
     flash('Logged out successfully!', 'success')
     return redirect(url_for('index'))
 
-
+@login_required
 @app.route('/day', methods=['GET', 'POST'])
 def day():
-    if 'user_id' not in session:
-        flash('You must log in to access this page', 'warning')
-        return redirect(url_for('index'))
-    else:
-        today = datetime.today()
-        personal_tasks = Task.query.filter_by(user_id = current_user.id,
-                                              due_date_m = int(today.strftime('%m')),
-                                              due_date_d = int(today.strftime('%d')),
-                                              )
-        return render_template('day.html', tasks=personal_tasks)
+    # if 'user_id' not in session:
+    #     flash('You must log in to access this page', 'warning')
+    #     return redirect(url_for('index'))
+    # else:
+    #     today = datetime.today()
+    #     weekday = today.weekday()
+    #     tasks = {}
+    personal_tasks = {}
+    #     group_tasks = {}
+    #     for (day in range(weekday,7)):
+    #         personal_tasks[day] = Task.query.filter_by(user_id = current_user.id,
+    #                                                       group_id = None,
+    #                                                       due_date_m = int(today.strftime('%m')),
+    #                                                       due_date_d = int(today.strftime('%d')),
+    #                                                       ).all()
+    #     for (group in current_user.groups):
+    #         group_tasks[group.name] = Task.query.filter_by(group_id = group.id
+    #
+    #                                                             )
+    #
+    return render_template('day.html', personal_tasks = personal_tasks)
 
+@login_required
 @app.route('/month', methods=['GET', 'POST'])
 def month():
     return render_template('month.html')
 
-
+@login_required
 @app.route('/search', methods=['GET', 'POST'])
 def search():
 
@@ -127,11 +148,13 @@ def search():
 
     if form.validate_on_submit():
         results = []
-
-        if form.data['search'] == '':
-            qry = db_session.query(Album)
-            results = qry.all()
-
+        search_string = form.search.data
+        if search_string:
+            if search_string == '':
+                results = Group.query.all()
+            else:
+                results = Group.query.filter(
+                    Group.name.like('%{}%'.format(search_string))).all()
         if not results:
             flash('No results found!')
 
@@ -151,17 +174,12 @@ def myGroups():
     Group.query.filter_by()
     return render_template('mygroups.html')
 
-
+@login_required
 @app.route('/leaveGroup', methods=['GET', 'POST'])
 def leaveGroup():
     return "yo"
 
-@app.route('/deleteTask', methods=['GET', 'POST'])
-@app.route('/editTask', methods=['GET', 'POST'])
-@app.route('/editGroup', methods=['GET', 'POST'])
-@app.route('/Requests', methods=['GET'])
-@app.route('/Requests', methods=['POST'])
-
+@login_required
 @app.route('/addTask', methods=['GET','POST'])
 def addTask():
     print(request.args)
@@ -171,14 +189,16 @@ def addTask():
         time = request.args['time'].split(":")
         month = int(date[0])
         day = int(date[1])
-        hour = int(time[0])
-        min = int(time[1])
-        task = Task(month,day,hour,min,0,request.args['title'], request.args['description'])
+        if 'time' in request.args:
+            hour = int(time[0])
+            min = int(time[1])
+        task = Task(current_user.id,month,day,hour,min,0,request.args['title'], request.args['description'])
         current_user.tasks.append(task)
         db.session.add(task)
         db.session.commit()
-    return "add task"
+    return redirect(url_for('day'))
 
+@login_required
 @app.route('/addEvent', methods=['GET', 'POST'])
 def addEvent():
     print(request.args)
@@ -188,20 +208,27 @@ def addEvent():
         time = request.args['time'].split(":")
         month = int(date[0])
         day = int(date[1])
-        hour = int(time[0])
-        min = int(time[1])
-        task = Task(month,day,hour,min,0,request.args['title'], request.args['description'])
+        if 'time' in request.args:
+            hour = int(time[0])
+            min = int(time[1])
+        task = Task(current_user.id,month,day,hour,min,0,request.args['title'],request.args['description'])
         current_user.tasks.append(task)
         db.session.add(task)
         db.session.commit()
-    return "add event"
+    return redirect(url_for('day'))
 
-@app.route('/joinGroup', methods=['GET', 'POST'])
-def joinGroup():
-    if 'name' in request.form.keys() and 'description' in request.form.keys():
-        Group.query.filter_by(id = int(request.form['group_name']))
+@login_required
+@app.route('/joinGroup/<group_id>', methods=['POST'])
+def joinGroup(group_id):
+        Group.query.filter_by(id = int(request.args['group_name']))
 
-@app.route('/createGroup', methods=['GET', 'POST'])
+@login_required
+@app.route('/createGroup', methods=['GET'])
+def createGroupForm():
+    return render_template('creategroup.html')
+
+@login_required
+@app.route('/createGroup', methods=['POST'])
 def createGroup():
     if 'name' in request.args.keys() and 'description' in request.args.keys():
         group = Group(request.args['name'],current_user.id, request.args['description'])
@@ -210,12 +237,28 @@ def createGroup():
         db.session.commit()
     # if 'group name' in title.args.keys():
     #     Group.query.filter_by(id = 2)
-    return "create group"
+    return redirect(url_for('search'))
 
+@login_required
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     return render_template('profile.html')
 
+@app.route('/deleteTask', methods=['GET', 'POST'])
+def deleteTask():
+    return "f"
+@app.route('/editTask', methods=['GET', 'POST'])
+def editTask():
+    return "f"
+@app.route('/editGroup', methods=['GET', 'POST'])
+def editGroup():
+    return "f"
+@app.route('/Requests', methods=['GET'])
+def requestsForm():
+    return "f"
+@app.route('/Requests', methods=['POST'])
+def makeRequests():
+    return "f"
 if __name__ == "__main__":
     app.debug = True
     app.run()
