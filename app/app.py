@@ -203,13 +203,14 @@ def joinGroup():
 
 @app.route('/createGroup', methods=['GET', 'POST'])
 def createGroup():
-    if 'name' in request.form.keys() and 'description' in request.form.keys():
-        group = Group(request.form['name'],current_user.id, request.form['description'])
+    if 'name' in request.args.keys() and 'description' in request.args.keys():
+        group = Group(request.args['name'],current_user.id, request.args['description'])
         current_user.append(group)
         db.session.add(group)
         db.session.commit()
-    if 'group name' in title.form.keys():
-        Group.query.filter_by(id = 2)
+    # if 'group name' in title.args.keys():
+    #     Group.query.filter_by(id = 2)
+    return "create group"
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
