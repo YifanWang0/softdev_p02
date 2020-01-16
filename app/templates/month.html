@@ -54,12 +54,19 @@
             </tr>
             </thead>
             <tbody>
-            {% for row in data %}
+            {% for week in data %}
                 <tr>
-                    {% for elem in row %}
+                    {% for day in week %}
                         <td>
                             <div class="tCell">
-                                <div class="cellContent">{{ elem }}</div>
+                                <div class="cellContent">
+                                    <div class="cellDate">{{ day[0] }}</div>
+                                    {{ day[1] }}
+                                    <br>
+                                    {{ day[2] }}
+                                    <br>
+                                    {{ day[3] }}
+                                </div>
                                 <div class="cellButton">
                                     <button style="float:right">View</button>
                                 </div>
