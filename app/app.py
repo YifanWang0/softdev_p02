@@ -220,7 +220,12 @@ def addEvent():
 @login_required
 @app.route('/joinGroup/<group_id>', methods=['POST'])
 def joinGroup(group_id):
-        Group.query.filter_by(id = int(request.args['group_name']))
+    group = Group.query.filter_by(id = group_id).first()
+    current_user.groups.append(group)
+    db.session.commit()
+    flash('You\'ve successfully joined the group!','success')
+    return redirect(url_for('search'))
+
 
 @login_required
 @app.route('/createGroup', methods=['GET'])
