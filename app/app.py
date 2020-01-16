@@ -148,13 +148,8 @@ def day():
             group_tasks[days[day]][group.name] = Task.query.filter_by(group_id = group.id,
                                                             due_date_m = int(today.strftime('%m')),
                                                             due_date_d=int(today.strftime('%d')) + day - weekday).all()
-<<<<<<< HEAD
 
     return render_template('week.html', personal_tasks = personal_tasks, group_tasks = group_tasks)
-=======
-    print(personal_tasks)
-    return render_template('day.html', personal_tasks = personal_tasks, group_tasks = group_tasks)
->>>>>>> cb02ebf8212c444071eba05f7891f2847d5402e5
 
 @login_required
 @app.route('/month', methods=['GET', 'POST'])
