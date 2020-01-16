@@ -164,16 +164,16 @@ def leaveGroup():
 
 @app.route('/addTask', methods=['GET','POST'])
 def addTask():
-    print(request.form['title'])
-    if 'title' in request.form.keys() and 'description' in request.form.keys() and 'date'in request.form.keys() and 'time' in request.form.keys():
+    print(request.args)
+    if 'title' in request.args.keys() and 'description' in request.args.keys() and 'date'in request.args.keys() and 'time' in request.args.keys():
         print("YOO")
-        date = request.form['date'].split("/")
-        time = request.form['time'].split(":")
+        date = request.args['date'].split("/")
+        time = request.args['time'].split(":")
         month = int(date[0])
         day = int(date[1])
         hour = int(time[0])
         min = int(time[1])
-        task = Task(month,day,hour,min,0,request.form['title'], request.form['description'])
+        task = Task(month,day,hour,min,0,request.args['title'], request.args['description'])
         current_user.tasks.append(task)
         db.session.add(task)
         db.session.commit()
@@ -181,16 +181,16 @@ def addTask():
 
 @app.route('/addEvent', methods=['GET', 'POST'])
 def addEvent():
-    print(request.form['title'])
-    if 'title' in request.form.keys() and 'description' in request.form.keys() and 'date'in request.form.keys() and 'time' in request.form.keys():
+    print(request.args)
+    if 'title' in request.args.keys() and 'description' in request.args.keys() and 'date'in request.args.keys() and 'time' in request.args.keys():
         print("YOO")
-        date = request.form['date'].split("/")
-        time = request.form['time'].split(":")
+        date = request.args['date'].split("/")
+        time = request.args['time'].split(":")
         month = int(date[0])
         day = int(date[1])
         hour = int(time[0])
         min = int(time[1])
-        task = Task(month,day,hour,min,0,request.form['title'], request.form['description'])
+        task = Task(month,day,hour,min,0,request.args['title'], request.args['description'])
         current_user.tasks.append(task)
         db.session.add(task)
         db.session.commit()
