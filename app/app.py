@@ -215,7 +215,7 @@ def genWeek(data):
     return week
 
 def genDisplayCard(args):
-    displayData = [1,[]]
+    displayData = [1,[],""]
     if len(args)==0:
         return [0,[]]
     if(args['day']=="" or args['month']==""):
@@ -225,7 +225,7 @@ def genDisplayCard(args):
                                                         due_date_m = int(args['month']),
                                                         due_date_d = int(args['day'])).all()
     displayData[1] = arr
-    print(displayData)
+    displayData[2] = "Tasks for: " + args['month'] + "/" + args['day']
     return displayData
 
 
