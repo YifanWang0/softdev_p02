@@ -13,11 +13,11 @@
         }
 
         .cellContent {
-            height: 150px;
+            height: 120px;
         }
 
-        .cellTask{
-            border-bottom:1px solid black;
+        .cellTask {
+            border-bottom: 1px solid black;
         }
 
         table {
@@ -25,6 +25,7 @@
             table-layout: fixed;
         }
     </style>
+
 
 {% endblock %}
 
@@ -54,21 +55,28 @@
                         <td>
                             <div class="tCell">
                                 <div class="cellContent">
-                                    <div class="cellDate" style="border-bottom:1px solid black;">{{ day[0] }}</div>
+                                    <div class="cellDate" style="border-bottom:1px solid black;">
+                                        {{ day[1] }}
+                                        <a style="visibility: hidden">{{ day[0] }}</a>
+                                    </div>
                                     <div class="cellList" style="padding-top:5px">
-                                        <div class="cellTask">
-                                            {{ day[1] }}
-                                        </div>
                                         <div class="cellTask">
                                             {{ day[2] }}
                                         </div>
                                         <div class="cellTask">
                                             {{ day[3] }}
                                         </div>
+                                        <div class="cellTask">
+                                            {{ day[4] }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="cellButton" style="float:bottom">
-                                    <button style="float:right">View</button>
+                                    <form action="/month">
+                                        <button style="float:right">View</button>
+                                        <input type="hidden" name="month" value="{{ day[0] }}">
+                                        <input type="hidden" name="day" value="{{ day[1] }}">
+                                    </form>
                                 </div>
                             </div>
                         </td>
@@ -79,6 +87,53 @@
 
         </table>
     </div>
+
+    <div class="modal fade" id="popUp" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% for task in displayData[1] %}
+                        <div class="row">
+                            <div class="col-sm">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ task.title }} [ ]
+                                            <button type="button" class="btn btn-outline-primary float-right"
+                                                    data-toggle="modal" data-target="#exampleModal">
+                                                Edit Task
+                                            </button>
+                                        </h6>
+                                        <!-- Button trigger modal -->
+                                        <div class="card-text">{{ task.description }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p id="displayMode" style="visibility: hidden" class="{{ displayData[0] }}">{{ displayData[0] }}</p>
+    <script>
+        check=document.getElementById("displayMode").innerHTML;
+        console.log(check);
+        if (check=="1"){
+            $(document).ready(function () {
+                $("#popUp").modal('show');
+            })
+        }
+    </script>
 {% endblock %}
 
 
