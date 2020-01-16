@@ -95,6 +95,9 @@
               <div class="card-body">
                   {% if group is not none %}
                     {{group.name}}
+                    <form action="{{ url_for('joinGroup',group_id = group.id) }}" method = "post">
+                      <button class="btn btn-outline-primary float-right" type="submit">Join Group</button>
+                    </form>
                   {% endif %}
               </div>
           </div>

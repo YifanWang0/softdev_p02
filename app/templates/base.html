@@ -35,6 +35,7 @@
     {% block head %}
     {% endblock %}
 </head>
+{% if current_user.is_authenticated %}
 <body>
 <nav class="navbar navbar-expand-sm bg-dark">
     <div class="navbar-header">
@@ -60,18 +61,6 @@
         </li>
     </ul>
     <div class="nav navbar-nav ml-auto">
-        {% if 'user_id' not in  session %}
-            <li><a href="{{ url_for('register') }}">
-                <button class="btn btn-link"><i
-                        class="fas fa-user-plus"></i>Sign up
-                </button>
-            </a></li>
-            <li><a href="{{ url_for('login') }}">
-                <button class="btn btn-link"><i
-                        class="fas fa-sign-in-alt"></i>Login
-                </button>
-            </a></li>
-        {% else %}
             <li class="navbar-text mr-4">
                 {% if current_user is not none %}
                     Currently logged in as: {{ current_user.username }}
@@ -85,7 +74,6 @@
         {% endif %}
     </div>
 </nav>
-{% if current_user.is_authenticated %}
 <div id="form button" style="position: absolute; bottom: 2%; right: 2%;">
     <button class="btn btn-primary" role="button" data-toggle="popover" data-trigger="focus"
             data-html="true" data-placement="top" title="Create New">
@@ -93,7 +81,6 @@
     </button>
 
 </div>
-{% endif %}
 <div id="taskModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -164,8 +151,8 @@
                                 <input class="form-control-sm" id="date" name="date" placeholder="MM/DD" type="text" required>
                             </div>
                             <div class="form-group">
-                                <label class="control-label" for="date">Event Time</label>
-                                <input class="form-control-sm" id="date" name="time" placeholder="HR/MIN" type="text" required>
+                                <label class="control-label" for="date">Event Time (optional)</label>
+                                <input class="form-control-sm" id="date" name="time" placeholder="HR/MIN" type="text">
                             </div>
                             <button class="btn btn-primary" type="submit">Add Event</button>
                         </form>
@@ -178,7 +165,7 @@
         </div>
     </div>
 </div>
-
+{% endif %}
 {% block content %}
 
 {% endblock content %}
