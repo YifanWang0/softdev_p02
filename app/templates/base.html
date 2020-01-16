@@ -33,7 +33,7 @@
     <script src="https://kit.fontawesome.com/0691185925.js" crossorigin="anonymous"></script>
     <script src="/static/js/myPopover.js"></script>
     {% block head %}
-    
+
     {% endblock %}
 </head>
 <body>
@@ -75,6 +75,7 @@
     </div>
     {% endif %}
 </nav>
+{{ render_flashes() }}
 {% if current_user.is_authenticated %}
   <div id="form button" style="position: absolute; bottom: 2%; right: 2%;">
       <button class="btn btn-primary" role="button" data-toggle="popover" data-trigger="focus"
@@ -167,7 +168,7 @@
           </div>
       </div>
   </div>
-  {% endif %}
+{% endif %}
 
 {% block content %}
 

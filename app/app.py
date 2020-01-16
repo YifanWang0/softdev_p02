@@ -230,7 +230,6 @@ def createGroupForm():
 @login_required
 @app.route('/createGroup', methods=['POST'])
 def createGroup():
-    print(request.args)
     print(request.form.keys())
     if 'name' in request.form.keys() and 'description' in request.form.keys():
         print("YOOO")
