@@ -1,8 +1,77 @@
 {% extends "base.html" %}
 
 {% block head %}
-    
-{% endblock %}
-{% block content %}
+
+    <style>
+        th {
+            width: 14%;
+        }
+
+        td {
+            width: 14%;
+        {#overflow: hidden;#}
+        }
+
+        tr {
+            height: 20%;
+        }
+
+        .tCell {
+
+        }
+
+        .cellContent {
+            height: 150px;
+        }
+
+        .cellButton {
+            float: bottom;
+        {#padding-right:20%;#}
+
+        }
+    table{
+        min-height: 90%;
+        table-layout: fixed;
+    }
+    </style>
 
 {% endblock %}
+
+
+{% block content %}
+
+    <div class="container" style="height:inherit">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Sun</th>
+                <th scope="col">Mon</th>
+                <th scope="col">Tues</th>
+                <th scope="col">Wed</th>
+                <th scope="col">Thurs</th>
+                <th scope="col">Fri</th>
+                <th scope="col">Sat</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in data %}
+                <tr>
+                    {% for elem in row %}
+                        <td>
+                            <div class="tCell">
+                                <div class="cellContent">{{ elem }}</div>
+                                <div class="cellButton">
+                                    <button style="float:right">View</button>
+                                </div>
+                            </div>
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+{% endblock %}
+
+

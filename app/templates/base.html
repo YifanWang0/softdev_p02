@@ -2,7 +2,6 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 {% block style %}
 
 {% endblock %}
@@ -11,6 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
+    <link rel="icon" href="{{url_for('static', filename='../../doc/flag.jpg')}}">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -77,13 +77,13 @@
 </nav>
 {{ render_flashes() }}
 {% if current_user.is_authenticated %}
-  <div id="form button" style="position: absolute; bottom: 2%; right: 2%;">
+    <div id="form button" style="position: fixed; bottom:2%; right: 2%;">
       <button class="btn btn-primary" role="button" data-toggle="popover" data-trigger="focus"
               data-html="true" data-placement="top" title="Create New">
           Create
       </button>
-
-  </div>
+</div>
+</body>
   <div id="taskModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
           <!-- Modal content-->
@@ -112,8 +112,8 @@
                                   <input class="form-control-sm" id="date" name="date" placeholder="MM/DD" type="text" required>
                               </div>
                               <div class="form-group">
-                                  <label class="control-label" for="date">Due Time</label>
-                                  <input class="form-control-sm" id="date" name="time" placeholder="HR:MIN" type="text" required>
+                                  <label class="control-label" for="date">Due Time (Optional)</label>
+                                  <input class="form-control-sm" id="date" name="time" placeholder="HR:MIN" type="text">
                               </div>
                               <button class="btn btn-primary" type="submit">Add Task</button>
                           </form>
@@ -173,7 +173,7 @@
 {% block content %}
 
 {% endblock content %}
-</body>
+
 
 
 </html>

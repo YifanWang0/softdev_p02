@@ -3,7 +3,10 @@
 {% block content %}
     {% if current_user.is_authenticated %}
         <h1>View Your Tasks</h1>
-        {% for task in tasks %}
+        {% for day in personal_tasks %}
+            <h5> {{ day }} </h5>
+            <h6> My Tasks</h6>
+            {% for task in personal_tasks[day] %}
             <div class="card" style="width: 50 rem;">
                 <div class="card-body">
                     <h5 class="card-title">{{task.title}}</h5> <h6>Due: {{task.due_date_m}}/{{task.due_date_d}}</h6>
@@ -11,6 +14,21 @@
                     <a href="/edittask" class="btn btn-primary">Edit</a>
                 </div>
             </div>
+            {% endfor %}
+            <h6> My Group Tasks</h6>
+            {% for group in group_tasks[day] %}
+                {{group}}
+                {% for task in group %}
+                <div class="card" style="width: 50 rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{task.title}}</h5>
+                        <h6>Due: {{task.due_date_m}}/{{task.due_date_d}}</h6>
+                        <p class="card-text">{{task.description}}</p>
+                        <a href="/edittask" class="btn btn-primary">Edit</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endfor %}
         {% endfor %}
     {% endif %}
 {% endblock %}
