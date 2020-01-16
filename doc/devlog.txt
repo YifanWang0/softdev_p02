@@ -110,6 +110,7 @@ implemented search
 
 clementC -- 2020-01-15 22:48
 fixed search errors and addTask errors
+created basic calendar(display only)
 
 emilyZ == 2020-01-15 23:26
 implemented daily to display every task for the week, first displaying personal tasks, then group tasks.
@@ -118,5 +119,9 @@ edited gitignore to prevent merge conflicts
 josephL-- 2020-01-15 22:23
 finished several tasks and backend and cleaned up
 
-clementC-- 2020-01-16 7:23
-added popup feature
+clementC -- 2020-01-16 02:12
+display personal tasks in calendar
+updated calendar display
+
+clementC -- 2020-01-16 07:30
+added popUp boxes for calendar days
