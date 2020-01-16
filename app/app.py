@@ -183,7 +183,7 @@ def leaveGroup():
 @app.route('/addTask', methods=['GET','POST'])
 def addTask():
     print(request.args)
-    if 'title' in request.args and 'description' in request.args and 'date'in request.args:
+    if 'title' in request.args.keys() and 'description' in request.args.keys() and 'date'in request.args.keys() and 'time' in request.args.keys():
         print("YOO")
         date = request.args['date'].split("/")
         time = request.args['time'].split(":")
@@ -201,8 +201,8 @@ def addTask():
 @login_required
 @app.route('/addEvent', methods=['GET', 'POST'])
 def addEvent():
-    print(request.args['title'])
-    if 'title' in request.args and 'description' in request.args and 'date'in request.args:
+    print(request.args)
+    if 'title' in request.args.keys() and 'description' in request.args.keys() and 'date'in request.args.keys() and 'time' in request.args.keys():
         print("YOO")
         date = request.args['date'].split("/")
         time = request.args['time'].split(":")
