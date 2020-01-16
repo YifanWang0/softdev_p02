@@ -92,6 +92,10 @@ and adding more modal forms
 emilyZ -- 2020-01-15 00:11
 added relevant photo and description to homepage
 
+josephL --2020-01-15 6:12
+fixed several backend issues
+implemented several backend tasks like creating tasks
+and integrated it with frontend
 
 clementC -- 2020-01-15 8:36
 fixed modals not passing data
@@ -99,3 +103,7 @@ fixed modals not passing data
 emilyZ -- 2020-01-15 11:35
 implemented frontend and backend for viewing tasks for the day.
 edited home to only allow for log in and sign up if not logged in.
+
+josephL -- 2020-01-15 17:23
+working on frontend to show information well
+implemented search

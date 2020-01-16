@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, session, render_template, flash, redirect, url_for, request, flash
+from flask import Flask, Blueprint, session, render_template, flash, redirect, url_for, request
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 
 from utl.forms import SignUpForm, LogInForm, SearchForm
@@ -81,11 +81,14 @@ def login():
     log_in_form = LogInForm()
 
     if log_in_form.validate_on_submit():
+        print("ahh")
         to_validate = User.query.filter_by(username=log_in_form.username.data).first()
 
         if to_validate is None or to_validate.password != log_in_form.password.data:
+            print("BOOO")
             flash('Incorrect username or password!', 'danger')
         else:
+            print("ahhhh")
             login_user(to_validate)
 
             if 'next' in session:
@@ -93,6 +96,7 @@ def login():
             else:
                 flash('Logged in successfully!', 'success')
                 return redirect(url_for('day'))
+
 
     return render_template('login.html', form=log_in_form)
 
@@ -104,7 +108,7 @@ def logout():
     flash('Logged out successfully!', 'success')
     return redirect(url_for('index'))
 
-
+@login_required
 @app.route('/day', methods=['GET', 'POST'])
 def day():
     # if 'user_id' not in session:
@@ -114,7 +118,7 @@ def day():
     #     today = datetime.today()
     #     weekday = today.weekday()
     #     tasks = {}
-    #     personal_tasks = {}
+    personal_tasks = {}
     #     group_tasks = {}
     #     for (day in range(weekday,7)):
     #         personal_tasks[day] = Task.query.filter_by(user_id = current_user.id,
@@ -127,8 +131,8 @@ def day():
     #
     #                                                             )
     #
-    #     return render_template('day.html', personal_tasks = personal_tasks)
-    return 1;
+    return render_template('day.html', personal_tasks = personal_tasks)
+
 @login_required
 @app.route('/month', methods=['GET', 'POST'])
 def month():
@@ -174,12 +178,6 @@ def myGroups():
 @app.route('/leaveGroup', methods=['GET', 'POST'])
 def leaveGroup():
     return "yo"
-
-@app.route('/deleteTask', methods=['GET', 'POST'])
-@app.route('/editTask', methods=['GET', 'POST'])
-@app.route('/editGroup', methods=['GET', 'POST'])
-@app.route('/Requests', methods=['GET'])
-@app.route('/Requests', methods=['POST'])
 
 @login_required
 @app.route('/addTask', methods=['GET','POST'])
@@ -247,6 +245,21 @@ def createGroup():
 def profile():
     return render_template('profile.html')
 
+@app.route('/deleteTask', methods=['GET', 'POST'])
+def deleteTask():
+    return "f"
+@app.route('/editTask', methods=['GET', 'POST'])
+def editTask():
+    return "f"
+@app.route('/editGroup', methods=['GET', 'POST'])
+def editGroup():
+    return "f"
+@app.route('/Requests', methods=['GET'])
+def requestsForm():
+    return "f"
+@app.route('/Requests', methods=['POST'])
+def makeRequests():
+    return "f"
 if __name__ == "__main__":
     app.debug = True
     app.run()
