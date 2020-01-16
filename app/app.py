@@ -148,8 +148,13 @@ def day():
             group_tasks[days[day]][group.name] = Task.query.filter_by(group_id = group.id,
                                                             due_date_m = int(today.strftime('%m')),
                                                             due_date_d=int(today.strftime('%d')) + day - weekday).all()
+<<<<<<< HEAD
 
     return render_template('week.html', personal_tasks = personal_tasks, group_tasks = group_tasks)
+=======
+    print(personal_tasks)
+    return render_template('day.html', personal_tasks = personal_tasks, group_tasks = group_tasks)
+>>>>>>> cb02ebf8212c444071eba05f7891f2847d5402e5
 
 @login_required
 @app.route('/month', methods=['GET', 'POST'])
@@ -158,16 +163,12 @@ def month():
     weekday = today.weekday()
     print(genWeek(getWeek(today,weekday,0)))
     print(today + timedelta(0))
-    firstRow=[0,1,2,3,4,5,6]
-    secondRow=[7,8,9,10,11,12,13]
-    thirdRow=[14,15,16,17,18,19,20]
-    fourthRow=[21,22,23,24,25,26,28]
     data=[]
     data.append(genWeek(getWeek(today,weekday,0)))
     data.append(genWeek(getWeek(today,weekday,1)))
     data.append(genWeek(getWeek(today,weekday,2)))
     data.append(genWeek(getWeek(today,weekday,3)))
-    return render_template('month.html', data=data,month=today.strftime('%B'))
+    return render_template('month.html', data=data,month=today.strftime('%B'),displayData=genDisplayCard(request.args))
 
 def getWeek(today,weekday,weekIncrem):
     personal_tasks = {}
@@ -175,38 +176,38 @@ def getWeek(today,weekday,weekIncrem):
     today=today+timedelta(7*weekIncrem)
     if weekday != 0:
         if weekday !=6:
-            personal_tasks[days[6] + "," + (today + timedelta(-1-weekday)).strftime('%d')] = []
+            personal_tasks[days[6] + "," + (today + timedelta(-1-weekday)).strftime('%m') + "," + (today + timedelta(-1-weekday)).strftime('%d')] = []
         else:
-            personal_tasks[days[6] + "," + today.strftime('%d')] = []
+            personal_tasks[days[6] + "," + today.strftime('%m') + "," + today.strftime('%d')] = []
         group_tasks[days[6]] = []
         for i in range(0,weekday):
-            personal_tasks[days[i] + "," + (today + timedelta(i-weekday)).strftime('%d')] = []
+            personal_tasks[days[i] + "," + (today + timedelta(i-weekday)).strftime('%m') + "," + (today + timedelta(i-weekday)).strftime('%d')] = []
             group_tasks[days[i]] = []
     else:
         today = today + timedelta(days=(6 - today.weekday() + (7 * weekIncrem)))
     for day in range(weekday, 6):
-        personal_tasks[days[day] + "," + (today + timedelta(day-weekday)).strftime('%d')] = Task.query.filter_by(user_id=current_user.id,
+        personal_tasks[days[day] + "," + (today + timedelta(day-weekday)).strftime('%m') + "," + (today + timedelta(day-weekday)).strftime('%d')] = Task.query.filter_by(user_id=current_user.id,
                                                          group_id=None,
                                                          due_date_m=int((today + timedelta(day-weekday)).strftime('%m')),
                                                          due_date_d=int((today + timedelta(day-weekday)).strftime('%d'))
                                                          ).all()
-    for day in range(weekday, 7):
-        for group in current_user.groups:
-            if group == None:
-                break
-            group_tasks[days[day]][group.name] = Task.query.filter_by(group_id=group.id,
-                                                                      due_date_m=int(today.strftime('%m')),
-                                                                      due_date_d=int(
-                                                                          today.strftime('%d')) + day - weekday).all()
+    # for day in range(weekday, 7):
+    #     for group in current_user.groups:
+    #         if group == None:
+    #             break
+    #         group_tasks[days[day]][group.name] = Task.query.filter_by(group_id=group.id,
+    #                                                                   due_date_m=int(today.strftime('%m')),
+    #                                                                   due_date_d=int(
+    #                                                                       today.strftime('%d')) + day - weekday).all()
     return(personal_tasks,group_tasks)
 
 def genWeek(data):
     personal_tasks = data[0]
     group_tasks = data[1]
     week=[]
-    day={"date","personal1","personal2","event1","event2"}
     for key in personal_tasks:
         day=[key.split(",")[1]]
+        day.append(key.split(",")[2])
         temp = []
         for elem in personal_tasks[key]:
             temp.append(elem.title)
@@ -214,10 +215,23 @@ def genWeek(data):
             if i < len(temp):
                 day.append(temp[i])
             else:
-                day.append("*")
+                day.append("|")
         week.append(day)
     return week
 
+def genDisplayCard(args):
+    displayData = [1,[],""]
+    if len(args)==0:
+        return [0,[]]
+    if(args['day']=="" or args['month']==""):
+        return [0, []]
+    arr = Task.query.filter_by(user_id = current_user.id,
+                                                        group_id = None,
+                                                        due_date_m = int(args['month']),
+                                                        due_date_d = int(args['day'])).all()
+    displayData[1] = arr
+    displayData[2] = "Tasks for: " + args['month'] + "/" + args['day']
+    return displayData
 
 
 @login_required
