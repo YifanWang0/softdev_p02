@@ -28,11 +28,14 @@
                     <div class="col-sm">
                       <div class="card border-info mb-3">
                           <div class="card-body">
-                              <h6 class="card-title">{{task.title}} [  ]
-                                <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#exampleModal">
-                                  Edit Task
-                                </button></h6>
-                              <!-- Button trigger modal -->
+                              <h6 class="card-title">{{task.title}}
+                                <!-- Button trigger modal -->
+                                <form action="{{ url_for('deleteTask', task_id = task.id) }}" method = "post">
+                                  <button type="submit" class="btn btn-outline-primary float-right">
+                                    Complete/Clear
+                                  </button>
+                                </form>
+                                </h6>
                               <div class="card-text">{{task.description}}
                               </div>
                           </div>

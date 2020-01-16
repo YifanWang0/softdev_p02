@@ -49,10 +49,11 @@ class Group(db.Model):
     users = association_proxy('groupownership',
                               'user',
                               creator=lambda u: GroupLinks(u.id, id))
-    def __init__(self, name, user_id, description):
+    def __init__(self, name, user_id, description, private):
         self.name = name
         self.description = description
         self.admin_id = user_id
+        self.private = private
 
 class Task(db.Model):
     #columns

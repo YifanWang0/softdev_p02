@@ -148,12 +148,8 @@ def day():
             group_tasks[days[day]][group.name] = Task.query.filter_by(group_id = group.id,
                                                             due_date_m = int(today.strftime('%m')),
                                                             due_date_d=int(today.strftime('%d')) + day - weekday).all()
-<<<<<<< HEAD
 
     return render_template('week.html', personal_tasks = personal_tasks, group_tasks = group_tasks)
-=======
-    return render_template('day.html', personal_tasks = personal_tasks, group_tasks = group_tasks)
->>>>>>> 17e20a840f5731212e39a704b045cbe278dc98d3
 
 @login_required
 @app.route('/month', methods=['GET', 'POST'])
@@ -241,8 +237,6 @@ def search():
             else:
                 results = Group.query.filter(
                     Group.name.like('%{}%'.format(search_string))).all()
-        if not results:
-            flash('No results found!')
 
     return render_template('search.html',
                            form=form,
@@ -253,35 +247,35 @@ def search():
 @login_required
 @app.route("/requests")
 def requests():
-    recieved = current_user().recieved_pending()
-    counter = 0
-    searchMatches = []
-    try:
-        for person in recieved:
-            if(counter > 45):
-                break
-            info = []
-            userDOB = current_user().dob.split("-")
-            this = util.matchmaker.Person(userDOB[0], userDOB[1], userDOB[2])
-            otherDOB = User.query_by_id(person, "dob").split("-")
-            other = util.matchmaker.Person(otherDOB[0], otherDOB[1], otherDOB[2]) #Person object for other user
-            other_user = User(person)
-            info.append(other_user.name)
-            info.append(round((util.matchmaker.personalityCompatibility(this, other))*100))
-            info.append(round((util.matchmaker.sexualCompatibility(this, other))*100))
-            info.append(round((util.matchmaker.inLawsCompatibility(this, other))*100))
-            info.append(round((util.matchmaker.futureSuccess(this, other))*100))
-            info.append(other_user.bio)
-            info.append(person)
-            info.append(round(current_user().user_dist(person)))
-            info.append(other_user.get_starsign().capitalize())
-            info.append(starsign_compatibilites[current_user().get_starsign()][other_user.get_starsign()])
-            counter += 1
-            searchMatches.append(info)
-    except Exception as e:
-        print(e)
-    session["prev_url"]= "/requests/recieved"
-    return render_template("requests.html", listings=searchMatches)
+    # recieved = current_user.recieved_pending()
+    # counter = 0
+    # searchMatches = []
+    # try:
+    #     for person in recieved:
+    #         if(counter > 45):
+    #             break
+    #         info = []
+    #         userDOB = current_user.dob.split("-")
+    #         this = util.matchmaker.Person(userDOB[0], userDOB[1], userDOB[2])
+    #         otherDOB = User.query_by_id(person, "dob").split("-")
+    #         other = util.matchmaker.Person(otherDOB[0], otherDOB[1], otherDOB[2]) #Person object for other user
+    #         other_user = User(person)
+    #         info.append(other_user.name)
+    #         info.append(round((util.matchmaker.personalityCompatibility(this, other))*100))
+    #         info.append(round((util.matchmaker.sexualCompatibility(this, other))*100))
+    #         info.append(round((util.matchmaker.inLawsCompatibility(this, other))*100))
+    #         info.append(round((util.matchmaker.futureSuccess(this, other))*100))
+    #         info.append(other_user.bio)
+    #         info.append(person)
+    #         info.append(round(current_user().user_dist(person)))
+    #         info.append(other_user.get_starsign().capitalize())
+    #         info.append(starsign_compatibilites[current_user.get_starsign()][other_user.get_starsign()])
+    #         counter += 1
+    #         searchMatches.append(info)
+    # except Exception as e:
+    #     print(e)
+    # session["prev_url"]= "/requests/recieved"
+    return render_template("requests.html")
 
 @login_required
 @app.route('/myGroups', methods=['GET','POST'])
@@ -290,9 +284,14 @@ def myGroups():
                             groups = current_user.groups)
 
 @login_required
-@app.route('/leaveGroup', methods=['GET', 'POST'])
-def leaveGroup():
-    return "yo"
+@app.route('/leaveGroup/<group_id>', methods=['GET', 'POST'])
+def leaveGroup(group_id):
+    group = Group.query.filter_by(id = int(group_id)).first()
+    current_user.groups.remove(group)
+    db.session.commit()
+    flash('You\'ve successfully left your group', 'success')
+    return redirect(url_for('myGroups'))
+
 
 @login_required
 @app.route('/addTask', methods=['GET','POST'])
@@ -341,7 +340,7 @@ def addEvent():
 @login_required
 @app.route('/joinGroup/<group_id>', methods=['POST'])
 def joinGroup(group_id):
-    group = Group.query.filter_by(id = group_id).first()
+    group = Group.query.filter_by(id = int(group_id)).first()
     current_user.groups.append(group)
     db.session.commit()
     flash('You\'ve successfully joined the group!','success')
@@ -351,24 +350,29 @@ def joinGroup(group_id):
 @app.route('/createGroup', methods=['POST'])
 def createGroup():
     print(request.form.keys())
-    if 'name' in request.form.keys() and 'description' in request.form.keys() and 'private' in request.form.keys():
+    if 'name' in request.form.keys() and 'description' in request.form.keys():
         print("YOOO")
-        group = Group(request.form['name'], current_user.id, request.form['description'], request.form['private'])
+        if 'private' in request.form.keys() and request.form['private'] is not None:
+            private = True
+        else:
+            private = False
+        group = Group(request.form['name'], current_user.id, request.form['description'], private)
         current_user.groups.append(group)
         db.session.add(group)
         db.session.commit()
+        flash('You\'ve successfully created your group', 'success')
     # if 'group name' in title.args.keys():
     #     Group.query.filter_by(id = 2)
-    return redirect(url_for('search'))
+    return redirect(url_for('myGroups'))
 
-@login_required
-@app.route('/profile', methods=['GET', 'POST'])
-def profile():
-    return render_template('profile.html')
+@app.route('/deleteTask/<task_id>', methods=['GET', 'POST'])
+def deleteTask(task_id):
+    task = Task.query.filter_by(id = task_id).first()
+    current_user.tasks.remove(task)
+    db.session.commit()
+    flash('You\'ve successfully completed your task', 'success')
+    redirect(url_for('day'))
 
-@app.route('/deleteTask', methods=['GET', 'POST'])
-def deleteTask():
-    return "f"
 @app.route('/editTask', methods=['GET', 'POST'])
 def editTask():
     return "f"
