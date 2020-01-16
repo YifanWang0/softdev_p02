@@ -43,6 +43,7 @@ class Group(db.Model):
     admin_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     name = db.Column(db.String(80), unique=True, nullable=False)
     description = db.Column(db.String(80), nullable=False)
+    private = db.Column(db.Boolean)
     #relationships
     tasks = db.relationship('Task', backref='group')
     users = association_proxy('groupownership',

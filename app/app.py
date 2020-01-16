@@ -9,6 +9,25 @@ from datetime import datetime, timedelta
 
 from utl.models import db, User, Group, GroupLinks, Task
 
+'''
+from googleapiclient.discovery import build
+from httplib2 import Http
+from oauth2client import file, client, tools
+
+try:
+    import argparse
+    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+except ImportError:
+    flags = None
+
+SCOPES = 'https://www.googleapis.com/auth/calendar'
+store = file.Storage('storage.json')
+creds = store.get()
+if not creds or creds.invalid:
+    flow = client.flow_from_clientsecrets('client_secrets.json', SCOPES)
+    creds = tools.run_flow(flow, store, flags)
+'''
+
 app = Flask(__name__)
 
 DEBUG = True
@@ -36,7 +55,7 @@ login_manager.login_view = 'auth.login'
 login_manager.login_message = 'Please Log In to view this page!'
 login_manager.login_message_category = 'danger'
 
-days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -226,10 +245,39 @@ def search():
                            query=form.search.data,
                            results=results)
 
+## THIS IS NOT THE RIGHT STUFF RN, FROM LAST PROJ
 @login_required
-@app.route('/requests', methods=['GET', 'POST'])
+@app.route("/requests")
 def requests():
-    return render_template('requests.html')
+    recieved = current_user().recieved_pending()
+    counter = 0
+    searchMatches = []
+    try:
+        for person in recieved:
+            if(counter > 45):
+                break
+            info = []
+            userDOB = current_user().dob.split("-")
+            this = util.matchmaker.Person(userDOB[0], userDOB[1], userDOB[2])
+            otherDOB = User.query_by_id(person, "dob").split("-")
+            other = util.matchmaker.Person(otherDOB[0], otherDOB[1], otherDOB[2]) #Person object for other user
+            other_user = User(person)
+            info.append(other_user.name)
+            info.append(round((util.matchmaker.personalityCompatibility(this, other))*100))
+            info.append(round((util.matchmaker.sexualCompatibility(this, other))*100))
+            info.append(round((util.matchmaker.inLawsCompatibility(this, other))*100))
+            info.append(round((util.matchmaker.futureSuccess(this, other))*100))
+            info.append(other_user.bio)
+            info.append(person)
+            info.append(round(current_user().user_dist(person)))
+            info.append(other_user.get_starsign().capitalize())
+            info.append(starsign_compatibilites[current_user().get_starsign()][other_user.get_starsign()])
+            counter += 1
+            searchMatches.append(info)
+    except Exception as e:
+        print(e)
+    session["prev_url"]= "/requests/recieved"
+    return render_template("requests.html", listings=searchMatches)
 
 @login_required
 @app.route('/myGroups', methods=['GET','POST'])
@@ -289,19 +337,13 @@ def joinGroup(group_id):
     flash('You\'ve successfully joined the group!','success')
     return redirect(url_for('search'))
 
-
-@login_required
-@app.route('/createGroup', methods=['GET'])
-def createGroupForm():
-    return render_template('creategroup.html')
-
 @login_required
 @app.route('/createGroup', methods=['POST'])
 def createGroup():
     print(request.form.keys())
-    if 'name' in request.form.keys() and 'description' in request.form.keys():
+    if 'name' in request.form.keys() and 'description' in request.form.keys() and 'private' in request.form.keys():
         print("YOOO")
-        group = Group(request.form['name'],current_user.id, request.form['description'])
+        group = Group(request.form['name'], current_user.id, request.form['description'], request.form['private'])
         current_user.groups.append(group)
         db.session.add(group)
         db.session.commit()
@@ -323,12 +365,7 @@ def editTask():
 @app.route('/editGroup', methods=['GET', 'POST'])
 def editGroup():
     return "f"
-@app.route('/Requests', methods=['GET'])
-def requestsForm():
-    return "f"
-@app.route('/Requests', methods=['POST'])
-def makeRequests():
-    return "f"
+
 if __name__ == "__main__":
     app.debug = True
     app.run()
