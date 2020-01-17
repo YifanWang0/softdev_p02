@@ -144,10 +144,15 @@ def day():
     for day in range(weekday,7):
         for group in current_user.groups:
             if group != None:
-                group_tasks[days[day]] = {group.name : Task.query.filter_by(group_id = group.id,
-                                                                due_date_m = int(today.strftime('%m')),
-                                                                due_date_d=int(today.strftime('%d')) + day - weekday).all()
+                if (Task.query.filter_by(group_id = group.id,
+                                        due_date_m = int(today.strftime('%m')),
+                                        due_date_d=int(today.strftime('%d')) + day - weekday).count() > 0):
+                    group_tasks[days[day]] = {group.name : Task.query.filter_by(group_id = group.id,
+                                                                                due_date_m = int(today.strftime('%m')),
+                                                                                due_date_d=int(today.strftime('%d')) + day - weekday).all()
                                          }
+                else:
+                    group_tasks[days[day]] = {group.name : None}
                 print(group_tasks[days[day]])
 
     return render_template('week.html', personal_tasks = personal_tasks, group_tasks = group_tasks)
@@ -381,13 +386,15 @@ def createGroup():
         group = Group(request.form['name'], current_user.id, request.form['description'], private)
         # for group in current_user.groups:
         #     print(loggin.info(current_user.group))
-        current_user.groups.append(group)
         db.session.add(group)
+        db.session.commit()
+        group = Group.query.filter_by(name = request.form['name']).first()
+        current_user.groups.append(group)
         db.session.commit()
         flash('You\'ve successfully created your group', 'success')
     # if 'group name' in title.args.keys():
     #     Group.query.filter_by(id = 2)
-    return redirect(url_for('myGroups'))
+    return redirect(url_for('search'))
 
 @app.route('/deleteTask/<task_id>', methods=['GET', 'POST'])
 def deleteTask(task_id):

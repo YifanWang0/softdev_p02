@@ -49,30 +49,35 @@
               </div>
             </div>
                 {% for group in group_tasks[day] %}
-                    <div class = "row">
-                      <div class="col-sm">
-                        {{group}}
-                      </div>
-                    </div>
-                    {% for task in group %}
-                    <div class = "row">
-                      <div class="col-sm">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">{{task.title}} posted by {{task.user_id}}</h5>
-                                <h6>Due: {{task.due_date_m}}/{{task.due_date_d}}</h6>
-                                <div class="card-text">{{task.description}}
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#exampleModal">
-                                  Edit Task
-                                </button>
-                                </div>
+                    {% if group_tasks[day][group] is not none %}
+                            <div class = "row">
+                              <div class="col-sm">
+                                {{group}}
+                              </div>
                             </div>
-                        </div>
-                      </div>
-                    </div>
-                  {% endfor %}
+                        {% for task in group_tasks[day][group] %}
+                            <div class = "row">
+                              <div class="col-sm">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{task.title()}} posted by {{task.user_id}}</h5>
+                                        <h6>Due: {{task.due_date_m}}/{{task.due_date_d}}</h6>
+                                        <div class="card-text">{{task.description}}
+                                        <!-- Button trigger modal -->
+                                        <form action="{{ url_for('deleteTask', task_id = task.id) }}" method = "post">
+                                          <button type="submit" class="btn btn-outline-primary float-right">
+                                            Complete/Clear
+                                          </button>
+                                        </form>
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                      {% endfor %}
+                  {% endif %}
               {% endfor %}
+
           {% endfor %}
     </div>
     {% endif %}
