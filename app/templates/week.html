@@ -30,10 +30,11 @@
                                 <div class="card-body">
                                     <h6 class="card-title">{{ task.title }}
                                         <!-- Button trigger modal -->
-                                        <form action="{{ url_for('deleteTask', task_id = task.id) }}" method="post">
+                                        <form action="{{ url_for('deleteTask', task_id = task.id) }}">
                                             <button type="submit" class="btn btn-outline-primary float-right">
                                                 Complete/Clear
                                             </button>
+                                            <input type="hidden" name="originalPage" value="day">
                                         </form>
                                         <form action="/day">
                                             <button type="submit" class="btn btn-outline-primary float-right">
