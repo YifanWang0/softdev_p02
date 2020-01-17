@@ -3,131 +3,194 @@
 {% block content %}
 
     {% if current_user.is_authenticated %}
-    <div class="container">
-      <div class="row">
-          <div class="col-sm">
-            <h1>This Week</h1>
-          </div>
-      </div>
-      {% for day in personal_tasks %}
-            <div class = "row">
-              <div class="col-sm">
-                <br>
-                <div class="card bg-info text-white">
-                  <h5> {{ day }} </h5>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <h1>This Week</h1>
                 </div>
-              </div>
             </div>
-            <div class = "row">
-              <div class="col-sm">
-                <h5> <h6> My Tasks</h6> </h5>
-              </div>
-            </div>
-              {% for task in personal_tasks[day] %}
-                  <div class = "row">
+            {% for day in personal_tasks %}
+                <div class="row">
                     <div class="col-sm">
-                      <div class="card border-info mb-3">
-                          <div class="card-body">
-                              <h6 class="card-title">{{task.title}}</h6>
-                                <!-- Button trigger modal -->
-                                <form action="{{ url_for('deleteTask', task_id = task.id) }}" method = "post">
-                                  <button type="submit" class="btn btn-outline-primary float-right">
-                                    Complete/Clear
-                                  </button>
-                                </form>
-                              <div class="card-text">
-                              {% if task.description is not none %}
-                                {{task.description}}
-                              {% endif %}
-                              </div>
-                          </div>
-                      </div>
+                        <br>
+                        <div class="card bg-info text-white">
+                            <h5> {{ day }} </h5>
+                        </div>
                     </div>
-                  </div>
-              {% endfor %}
-            <div class = "row">
-              <div class="col-sm">
-                <h6> Group Tasks</h6>
-              </div>
-            </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <h5><h6> My Tasks</h6></h5>
+                    </div>
+                </div>
+                {% for task in personal_tasks[day] %}
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="card border-info mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ task.title }}</h6>
+                                    <form action="/day">
+                                        <button type="submit" class="btn btn-outline-primary float-right">
+                                            Edit Task
+                                        </button>
+                                        <input type="hidden" name="taskID" value="{{ task.id }}">
+                                    </form>
+                                    <!-- Button trigger modal -->
+                                    <form action="{{ url_for('deleteTask', task_id = task.id) }}" method="post">
+                                        <button type="submit" class="btn btn-outline-primary float-right">
+                                            Complete/Clear
+                                        </button>
+                                    </form>
+                                    <div class="card-text">
+                                        {% if task.description is not none %}
+                                            {{ task.description }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="row">
+                    <div class="col-sm">
+                        <h6> Group Tasks</h6>
+                    </div>
+                </div>
                 {% for group in group_tasks[day] %}
                     {% if group_tasks[day][group] is not none %}
-                            <div class = "row">
-                              <div class="col-sm">
-                                {{group}}
-                              </div>
+                        <div class="row">
+                            <div class="col-sm">
+                                {{ group }}
                             </div>
+                        </div>
                         {% for task in group_tasks[day][group] %}
-                            <div class = "row">
-                              <div class="col-sm">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h6 class="card-title">{{task.title}} posted by {{task.user_id}}</h6>
-                                        <!-- Button trigger modal -->
-                                        <form action="{{ url_for('deleteTask', task_id = task.id) }}" method = "post">
-                                          <button type="submit" class="btn btn-outline-primary float-right">
-                                            Complete/Clear
-                                          </button>
-                                        </form>
-                                        <h6>Due: {{task.due_date_m}}/{{task.due_date_d}}</h6>
-                                        <div class="card-text">
-                                        {% if task.description is not none %}
-                                          {{task.description}}
-                                        {% endif %}
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title">{{ task.title }} posted by {{ task.user_id }}</h6>
+                                            <form action="/day">
+                                                <button type="submit" class="btn btn-outline-primary float-right">
+                                                    Edit Task
+                                                </button>
+                                                <input type="hidden" name="taskID" value="{{ task.id }}">
+                                            </form>
+                                            <!-- Button trigger modal -->
+                                            <form action="{{ url_for('deleteTask', task_id = task.id) }}" method="post">
+                                                <button type="submit" class="btn btn-outline-primary float-right">
+                                                    Complete/Clear
+                                                </button>
+                                            </form>
+                                            <h6>Due: {{ task.due_date_m }}/{{ task.due_date_d }}</h6>
+                                            <div class="card-text">
+                                                {% if task.description is not none %}
+                                                    {{ task.description }}
+                                                {% endif %}
 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                              </div>
                             </div>
-                      {% endfor %}
-                  {% endif %}
-              {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
 
-          {% endfor %}
-    </div>
-    {% endif %}
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <!-- Modal content-->
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">Edit Task</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            {% endfor %}
         </div>
-        <div class="modal-body">
-            <div class="card">
-                <div class="card-body">
-                    <form action="{{ url_for('createGroup') }}" method = "post">
-                        <div class="form-group">
-                            Name
-                            <input class="form-control-sm card-title" type="text" name="name"
-                                   placeholder="Software Development" required><br>
+    {% endif %}
+    <div id="editTask" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Task</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="{{ url_for('editTask', task_id = editData.id) }}" method="get">
+                                <div id="check" style="visibility: hidden">{{ editData.id }}</div>
+                                <div class="form-group">
+                                    Task Name
+                                    <input class="form-control-sm card-title" type="text" name="title"
+                                           value="{{ editData.title }}" required><br>
+                                </div>
+                                <div class="form-group">
+                                    Description
+                                    <input class="form-control-sm" type="text" name="description"
+                                           value="{{ editData.description }}" required><br><br>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="date">Due Date</label>
+                                    <input class="form-control-sm" id="date" name="date" value="{{ editData.dueDate }}"
+                                           type="text"
+                                           required>
+                                </div>
+                                <button class="btn btn-primary" type="submit">Update</button>
+                                <input type="hidden" name="originalPage" value="day">
+                            </form>
                         </div>
-                        <div class="form-group">
-                            Description
-                            <input class="form-control-sm" type="text" name="description" placeholder="A Senior CS Class in Stuy" required><br><br>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="date">Due Date</label>
-                            <input class="form-control-sm" id="date" name="date" placeholder="MM/DD" type="text" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="date">Due Time (Optional, in Military time)</label>
-                            <input class="form-control-sm" id="date" name="time" placeholder="HR:MIN" type="text">
-                        </div>
-                        <button class="btn btn-primary" type="submit">Confirm Edits</button>
-                    </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
     </div>
-  </div>
-</div>
+    <script>
+        check = document.getElementById("check").innerHTML;
+        console.log(check);
+        if (check != "") {
+            $(document).ready(function () {
+                $("#editTask").modal('show');
+            })
+        }
+    </script>
+    <!-- Modal -->
+    {#<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">#}
+    {#  <div class="modal-dialog" role="document">#}
+    {#    <!-- Modal content-->#}
+    {#    <div class="modal-content">#}
+    {#        <div class="modal-header">#}
+    {#            <h5 class="modal-title">Edit Task</h5>#}
+    {#            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+    {#                <span aria-hidden="true">&times;</span>#}
+    {#            </button>#}
+    {#        </div>#}
+    {#        <div class="modal-body">#}
+    {#            <div class="card">#}
+    {#                <div class="card-body">#}
+    {#                    <form action="{{ url_for('createGroup') }}" method = "post">#}
+    {#                        <div class="form-group">#}
+    {#                            Name#}
+    {#                            <input class="form-control-sm card-title" type="text" name="name"#}
+    {#                                   placeholder="Software Development" required><br>#}
+    {#                        </div>#}
+    {#                        <div class="form-group">#}
+    {#                            Description#}
+    {#                            <input class="form-control-sm" type="text" name="description" placeholder="A Senior CS Class in Stuy" required><br><br>#}
+    {#                        </div>#}
+    {#                        <div class="form-group">#}
+    {#                            <label class="control-label" for="date">Due Date</label>#}
+    {#                            <input class="form-control-sm" id="date" name="date" placeholder="MM/DD" type="text" required>#}
+    {#                        </div>#}
+    {#                        <div class="form-group">#}
+    {#                            <label class="control-label" for="date">Due Time (Optional, in Military time)</label>#}
+    {#                            <input class="form-control-sm" id="date" name="time" placeholder="HR:MIN" type="text">#}
+    {#                        </div>#}
+    {#                        <button class="btn btn-primary" type="submit">Confirm Edits</button>#}
+    {#                    </form>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#        <div class="modal-footer">#}
+    {#            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>#}
+    {#        </div>#}
+    {#    </div>#}
+    {#  </div>#}
+    {#</div>#}
 {% endblock %}
