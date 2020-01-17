@@ -116,10 +116,13 @@
                                                 </button>
                                                 <input type="hidden" name="originalPage" value="month">
                                             </form>
+                                            <button type="button" class="btn btn-outline-primary float-right"
+                                                    data-toggle="modal" data-target="#exampleModal">
+                                                Edit Task
+                                            </button>
                                         </h6>
                                         <!-- Button trigger modal -->
-                                        <div class="card-text">{{ task.description }}
-                                        </div>
+                                        <div class="card-text">{{ task.description }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -189,5 +192,3 @@
         }
     </script>
 {% endblock %}
-
-

@@ -340,11 +340,8 @@ def addTask():
         date = request.args['date'].split("/")
         month = int(date[0])
         day = int(date[1])
-<<<<<<< HEAD
-        if 'time' in request.args and request.args['time'] != '':
-=======
+
         if 'time' in request.args and request.args['time'] is not None and request.args['time'] != '':
->>>>>>> 77f5758b1641eb66782279d1c6518b90a6c95177
             time = request.args['time'].split(":")
             hour = int(time[0])
             min = int(time[1])
