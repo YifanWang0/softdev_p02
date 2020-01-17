@@ -70,7 +70,7 @@
                                 <div class="col-sm">
                                     <div class="card border-info mb-3">
                                         <div class="card-body">
-                                            <h6 class="card-title">{{ task.title }} posted by {{ task.user_id }}  [{{ task.due_date_m }}/{{ task.due_date_d }}]</h6>
+                                            <h6 class="card-title">{{ task.title }} - {{ userTable[task.user_id] }}  [{{ task.due_date_m }}/{{ task.due_date_d }}]</h6>
                                             <form action="/day">
                                                 <button type="submit" class="btn btn-outline-primary float-right">
                                                     Edit
@@ -160,7 +160,7 @@
                                 <div class="col-sm">
                                     <div class="card border-secondary mb-3">
                                         <div class="card-body">
-                                            <h6 class="card-title">{{ task.title }} posted by {{ task.user_id }}</h6>
+                                            <h6 class="card-title">{{ task.title }} - {{ userTable[task.user_id] }}</h6>
                                             <form action="/day">
                                                 <button type="submit" class="btn btn-outline-primary float-right">
                                                     Edit
