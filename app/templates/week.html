@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-sm">
                     <br>
-                    <div class="card bg-info text-white">
+                    <div class="card bg-danger text-white">
                         <h5> Overdue Tasks </h5>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                                 <div class="col-sm">
                                     <div class="card">
                                         <div class="card-body">
-                                            <h6 class="card-title">{{ task.title }} posted by {{ task.user_id }}</h6>
+                                            <h6 class="card-title">{{ task.title }} posted by {{ task.user_id }}  [{{ task.due_date_m }}/{{ task.due_date_d }}]</h6>
                                             <form action="/day">
                                                 <button type="submit" class="btn btn-outline-primary float-right">
                                                     Edit Task
@@ -84,7 +84,6 @@
                                                     Complete/Clear
                                                 </button>
                                             </form>
-                                            <h6>Due: {{ task.due_date_m }}/{{ task.due_date_d }}</h6>
                                             <div class="card-text">
                                                 {% if task.description is not none %}
                                                     {{ task.description }}
@@ -172,7 +171,9 @@
                                                     Complete/Clear
                                                 </button>
                                             </form>
-                                            <h6>Due: {{ task.due_date_m }}/{{ task.due_date_d }}</h6>
+                                            {% if task.due_date_hr is not none %}
+                                                <h6>Due: {{ task.due_date_hr }}:{{ task.due_date_mm }}</h6>
+                                            {% endif %}
                                             <div class="card-text">
                                                 {% if task.description is not none %}
                                                     {{ task.description }}
