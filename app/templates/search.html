@@ -110,7 +110,7 @@
                     {% elif group in current_user.requests %}
                       <button class="btn btn-outline-primary float-right" disabled>Pending Request</button>
                     {% elif group.private %}
-                      <form action="{{ url_for('request',group_id = group.id) }}" method = "post">
+                      <form action="{{ url_for('createrequest',group_id = group.id) }}" method = "post">
                         <button class="btn btn-primary float-right" type="submit">Request to Join</button>
                       </form>
                     {% else %}

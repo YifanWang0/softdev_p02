@@ -315,7 +315,7 @@ def search():
 
 @login_required
 @app.route('/createrequests/<group_id>', methods=['POST'])
-def request(group_id):
+def createrequest(group_id):
     group = Group.query.filter_by(id = int(group_id)).first()
     group.requests.append(current_user)
     db.session.commit()
@@ -401,7 +401,7 @@ def addTask():
 @login_required
 @app.route('/joinGroup/<group_id>', methods=['POST'])
 def joinGroup(group_id):
-    group = Group.query.filter_by(id=int(group_id)).first()
+    group = Group.query.filter_by(id= int(group_id) ).first()
     current_user.groups.append(group)
     db.session.commit()
     flash('You\'ve successfully joined the group!', 'success')
@@ -411,6 +411,7 @@ def joinGroup(group_id):
 @login_required
 @app.route('/createGroup', methods=['POST'])
 def createGroup():
+    print(request.form.keys())
     if 'name' in request.form.keys() and 'description' in request.form.keys():
         print("creating group")
         private = False
