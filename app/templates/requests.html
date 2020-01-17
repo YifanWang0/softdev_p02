@@ -5,21 +5,21 @@
 <div class="container">
   <div class="row">
     <div class="col-sm">
-    <h1>Requests to join my groups:</h1>
+    <h2>Requests to join my groups:</h2>
     </div>
   </div>
     {% for group in groups %}
       <div class = "row">
         <div class="col-sm">
-          <h1>{{group.name}}:</h1>
+          <h5>{{group.name}}:</h5>
         </div>
       </div>
-        {% for request in group.requests %}
+        {% for requester in group.requesters %}
             <div class = "row">
               <div class="col-sm">
               <div class="card">
                   <div class="card-body">
-                      <h5 class="card-title">{{request.name}}
+                      <h6 class="card-title">{{requester.name}}
                         <form action="{{ url_for('accept', group_id = group.id, requester_id = request.requester_id) }}">
                             <button type="submit" class="btn btn-outline-primary float-right">
                                 Accept
@@ -32,7 +32,7 @@
                             </button>
                             <input type="hidden" name="originalPage" value="day">
                         </form>
-                      </h5>
+                      </h6>
                   </div>
               </div>
             </div>
@@ -41,7 +41,8 @@
   {% endfor %}
   <div class="row">
     <div class="col-sm">
-    <h1>My requests join groups:</h1>
+      <br>
+    <h2>My requests join groups:</h2>
     </div>
   </div>
   {% for request in requests %}

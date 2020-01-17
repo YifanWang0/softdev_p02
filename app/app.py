@@ -411,7 +411,6 @@ def joinGroup(group_id):
 @login_required
 @app.route('/createGroup', methods=['POST'])
 def createGroup():
-    print(request.form.keys())
     if 'name' in request.form.keys() and 'description' in request.form.keys():
         print("creating group")
         private = False
