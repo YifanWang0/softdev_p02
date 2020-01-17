@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, session, render_template, flash, redirect, url_for, request
+from flask import Flask, Blueprint, session, request, render_template, flash, redirect, url_for
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 
 from utl.forms import SignUpForm, LogInForm, SearchForm
@@ -157,8 +157,7 @@ def day():
                     temp[group.name]=Task.query.filter_by(group_id=group.id,
                                                          due_date_m=int(today.strftime('%m')),
                                                          due_date_d=int(today.strftime('%d')) + day - weekday).all()
-                else:
-                    temp[group.name] = None
+
         group_tasks[days[day].capitalize() + "  " + (today + timedelta(day - weekday)).strftime('%x')[0:5]] = temp
 
     my_overdue_tasks = Task.query.filter(Task.group_id == None, Task.user_id == current_user.id,Task.due_date_m <= int(today.strftime('%m')),
@@ -166,17 +165,26 @@ def day():
     group_overdue_tasks = {}
     for group in current_user.groups:
         if group != None:
-            group_overdue_tasks[group.name] = Task.query.filter(Task.group_id == group.id, Task.due_date_m <= int(today.strftime('%m')),
+            if Task.query.filter(Task.group_id == group.id, Task.due_date_m <= int(today.strftime('%m')),
+                                                                Task.due_date_d < int(today.strftime('%d'))).count()>0:
+                group_overdue_tasks[group.name] = Task.query.filter(Task.group_id == group.id, Task.due_date_m <= int(today.strftime('%m')),
                                                                 Task.due_date_d < int(today.strftime('%d'))).all()
-        else:
-            group_overdue_tasks[group.name] = None
     print(group_overdue_tasks)
     print(group_tasks)
-    print(request.args)
+    print(overdue_tasks)
     return render_template('week.html', userTable=genUserTable(), personal_tasks=personal_tasks, group_tasks=group_tasks,
                            my_overdue_tasks=my_overdue_tasks, group_overdue_tasks=group_overdue_tasks,
                            editData=genEditCard(request.args))
-
+# def checkDict(dict):
+#     if(len(dict)==0):
+#         return None
+#     check = True
+#     for key in dict:
+#         if dict[key] is not None:
+#             check = False
+#     if(check):
+#         return None
+#     return dict
 def genUserTable():
     result={}
     for user in User.query.all():
