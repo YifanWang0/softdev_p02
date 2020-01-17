@@ -143,11 +143,12 @@ def day():
                                                         ).all()
     for day in range(weekday,7):
         for group in current_user.groups:
-            if group == None:
-                break
-            group_tasks[days[day]][group.name] = Task.query.filter_by(group_id = group.id,
-                                                            due_date_m = int(today.strftime('%m')),
-                                                            due_date_d=int(today.strftime('%d')) + day - weekday).all()
+            if group != None:
+                group_tasks[days[day]] = {group.name : Task.query.filter_by(group_id = group.id,
+                                                                due_date_m = int(today.strftime('%m')),
+                                                                due_date_d=int(today.strftime('%d')) + day - weekday).all()
+                                         }
+                print(group_tasks[days[day]])
 
     return render_template('week.html', personal_tasks = personal_tasks, group_tasks = group_tasks)
 
@@ -289,6 +290,8 @@ def requests():
 @login_required
 @app.route('/myGroups', methods=['GET','POST'])
 def myGroups():
+    print(current_user.username)
+    print(current_user.groups)
     return render_template('mygroups.html',
                             groups = current_user.groups)
 
@@ -311,18 +314,21 @@ def addTask():
         date = request.args['date'].split("/")
         month = int(date[0])
         day = int(date[1])
-        if 'time' in request.args and request.args['time'] is not None:
+        if 'time' in request.args and request.args['time'] != '':
             time = request.args['time'].split(":")
             hour = int(time[0])
             min = int(time[1])
         else:
             hour = None
             min = None
-        task = Task(current_user.id,month,day,hour,min,0,request.args['title'], request.args['description'])
-        current_user.tasks.append(task)
         if('group' in request.args and request.args['group'] != "N/A"):
-            group = Group.query.filter_by(name = request.args['group'])
+            group = Group.query.filter_by(name = request.args['group']).first()
+            task = Task(current_user.id,month,day,hour,min,0,request.args['title'], request.args['description'], group.id)
             group.tasks.append(task)
+            print(group.tasks)
+        else:
+            task = Task(current_user.id,month,day,hour,min,0,request.args['title'], request.args['description'], None)
+        current_user.tasks.append(task)
         db.session.add(task)
         db.session.commit()
     return redirect(url_for('day'))
@@ -360,12 +366,21 @@ def joinGroup(group_id):
 def createGroup():
     print(request.form.keys())
     if 'name' in request.form.keys() and 'description' in request.form.keys():
-        print("YOOO")
+        print("creating group")
+        private = False
+        for group in Group.query.all():
+            print(group.name)
+            print(request.form['name'])
+            if group.name == request.form['name']:
+                flash('You\'re group name already exists!', 'danger')
+                return redirect(url_for('search'))
+
         if 'private' in request.form.keys() and request.form['private'] is not None:
             private = True
-        else:
-            private = False
+            print("private")
         group = Group(request.form['name'], current_user.id, request.form['description'], private)
+        # for group in current_user.groups:
+        #     print(loggin.info(current_user.group))
         current_user.groups.append(group)
         db.session.add(group)
         db.session.commit()

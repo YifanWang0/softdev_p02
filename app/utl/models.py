@@ -1,4 +1,3 @@
-
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -10,7 +9,6 @@ class GroupLinks(db.Model): #this is automatically created when you append users
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
-    credibility = db.Column(db.Integer, nullable = False)
 
     user = db.relationship('User', backref='groupownership')
     group = db.relationship('Group', backref='groupownership')
@@ -18,7 +16,6 @@ class GroupLinks(db.Model): #this is automatically created when you append users
     def __init__(self, user_id, group_id):
         self.user_id = user_id
         self.group_id = group_id
-        self. credibility = 100
 
 class User(db.Model, UserMixin):
     # columns
@@ -49,6 +46,7 @@ class Group(db.Model):
     users = association_proxy('groupownership',
                               'user',
                               creator=lambda u: GroupLinks(u.id, id))
+                              
     def __init__(self, name, user_id, description, private):
         self.name = name
         self.description = description
@@ -72,7 +70,7 @@ class Task(db.Model):
     upvotes = db.Column(db.Integer)
     downvotes = db.Column(db.Integer)
 
-    def __init__(self, user_id, month, day, hour, min, priority, title, description):
+    def __init__(self, user_id, month, day, hour, min, priority, title, description, group_id):
         self.user_id = user_id
         self.due_date_m = month
         self.due_date_d = day
@@ -83,3 +81,4 @@ class Task(db.Model):
         self.description = description
         self.upvotes = None
         self.downvotes = None
+        self.group_id = group_id
