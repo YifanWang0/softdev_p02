@@ -83,6 +83,7 @@
                                                 <button type="submit" class="btn btn-outline-primary float-right">
                                                     Complete/Clear
                                                 </button>
+                                                <input type="hidden" name="originalPage" value="day">
                                             </form>
                                             {% if task.due_date_hr is not none%}
                                               <h7>Due - {{ task.due_date_hr }}:{{ task.due_date_mm }}</h7>

@@ -1,5 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+{% if current_user.is_authenticated %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+    <h1>Requests to join my groups:</h1>
+    </div>
+  </div>
+    {% for request in list_of_requests %}
+      <div class = "row">
+        <div class="col-sm">
+          <div class="card" style="width: 50 rem;">
+              <div class="card-body">
+                  <h5 class="card-title">{{request.group}}</h5>
+                  <p class="card-text">{{request.name}}</p>
+                  <div class="btn-group">
+                      <a href=" "><button type="button" class="btn btn-primary">Accept</button></a>
+                      &nbsp;
+                      <a href=" "><button type="button" class="btn btn-primary">Deny</button></a>
+                  </div><br><br>
+              </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}
 {% endblock %}
