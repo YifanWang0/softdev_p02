@@ -62,7 +62,7 @@ class Task(db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
     due_date_m = db.Column(db.Integer, nullable = False)
     due_date_d = db.Column(db.Integer, nullable = False)
-    due_date_hr = db.Column(db.Integer, nullable=False)
+    due_date_hr = db.Column(db.Integer)
     due_date_mm = db.Column(db.Integer)
     priority = db.Column(db.Integer, nullable = False)
     timestamp = db.Column(db.DateTime, nullable=False,
