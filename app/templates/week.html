@@ -41,6 +41,9 @@
                                             Complete/Clear
                                         </button>
                                     </form>
+                                    {% if task.due_date_hr is not none%}
+                                      <h7>Due - {{ task.due_date_hr }}:{{ task.due_date_mm }}</h7>
+                                    {% endif %}
                                     <div class="card-text">
                                         {% if task.description is not none %}
                                             {{ task.description }}
@@ -66,7 +69,7 @@
                         {% for task in group_tasks[day][group] %}
                             <div class="row">
                                 <div class="col-sm">
-                                    <div class="card">
+                                    <div class="card border-secondary mb-3">
                                         <div class="card-body">
                                             <h6 class="card-title">{{ task.title }} posted by {{ task.user_id }}</h6>
                                             <form action="/day">
@@ -81,12 +84,13 @@
                                                     Complete/Clear
                                                 </button>
                                             </form>
-                                            <h6>Due: {{ task.due_date_m }}/{{ task.due_date_d }}</h6>
+                                            {% if task.due_date_hr is not none%}
+                                              <h7>Due - {{ task.due_date_hr }}:{{ task.due_date_mm }}</h7>
+                                            {% endif %}
                                             <div class="card-text">
                                                 {% if task.description is not none %}
                                                     {{ task.description }}
                                                 {% endif %}
-
                                             </div>
                                         </div>
                                     </div>

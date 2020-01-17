@@ -406,7 +406,7 @@ def deleteTask(task_id):
     db.session.commit()
     flash('You\'ve successfully completed your task', 'success')
     print(request.args)
-    return redirect(url_for(request.args['originalPage']))
+    return redirect(url_for('day'))
 
 @app.route('/editTask/<task_id>', methods=['GET', 'POST'])
 def editTask(task_id):
