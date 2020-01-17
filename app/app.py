@@ -341,7 +341,6 @@ def addTask():
         month = int(date[0])
         day = int(date[1])
         if 'time' in request.args and request.args['time'] != '':
-
             time = request.args['time'].split(":")
             hour = int(time[0])
             min = int(time[1])
