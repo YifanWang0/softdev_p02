@@ -136,7 +136,7 @@ def day():
     personal_tasks = {}
     group_tasks = {}
     for day in range(weekday,7):
-        personal_tasks[days[day]] = Task.query.filter_by(user_id = current_user.id,
+        personal_tasks[days[day].capitalize() + "  " + (today+timedelta(day-weekday)).strftime('%x')[0:5]] = Task.query.filter_by(user_id = current_user.id,
                                                         group_id = None,
                                                         due_date_m = int(today.strftime('%m')),
                                                         due_date_d = int(today.strftime('%d')) + day - weekday
@@ -147,13 +147,13 @@ def day():
                 if (Task.query.filter_by(group_id = group.id,
                                         due_date_m = int(today.strftime('%m')),
                                         due_date_d=int(today.strftime('%d')) + day - weekday).count() > 0):
-                    group_tasks[days[day]] = {group.name : Task.query.filter_by(group_id = group.id,
+                    group_tasks[days[day].capitalize() + "  " + (today+timedelta(day-weekday)).strftime('%x')[0:5]] = {group.name : Task.query.filter_by(group_id = group.id,
                                                                                 due_date_m = int(today.strftime('%m')),
                                                                                 due_date_d=int(today.strftime('%d')) + day - weekday).all()
                                          }
                 else:
-                    group_tasks[days[day]] = {group.name : None}
-                print(group_tasks[days[day]])
+                    group_tasks[days[day].capitalize() + "  " + (today+timedelta(day-weekday)).strftime('%x')[0:5]] = {group.name : None}
+                print(group_tasks[days[day].capitalize() + "  " + (today+timedelta(day-weekday)).strftime('%x')[0:5]])
 
     return render_template('week.html', personal_tasks = personal_tasks, group_tasks = group_tasks, editData=genEditCard(request.args))
 
