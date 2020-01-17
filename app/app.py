@@ -339,25 +339,6 @@ def addTask():
     return redirect(url_for('day'))
 
 @login_required
-@app.route('/addEvent', methods=['GET', 'POST'])
-def addEvent():
-    print(request.args)
-    if 'title' in request.args.keys() and 'description' in request.args.keys() and 'date'in request.args.keys() and 'time' in request.args.keys():
-        print("YOO")
-        date = request.args['date'].split("/")
-        time = request.args['time'].split(":")
-        month = int(date[0])
-        day = int(date[1])
-        if 'time' in request.args:
-            hour = int(time[0])
-            min = int(time[1])
-        task = Task(current_user.id,month,day,hour,min,0,request.args['title'],request.args['description'])
-        current_user.tasks.append(task)
-        db.session.add(task)
-        db.session.commit()
-    return redirect(url_for('day'))
-
-@login_required
 @app.route('/joinGroup/<group_id>', methods=['POST'])
 def joinGroup(group_id):
     group = Group.query.filter_by(id = int(group_id)).first()

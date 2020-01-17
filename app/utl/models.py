@@ -46,7 +46,7 @@ class Group(db.Model):
     users = association_proxy('groupownership',
                               'user',
                               creator=lambda u: GroupLinks(u.id, id))
-                              
+
     def __init__(self, name, user_id, description, private):
         self.name = name
         self.description = description
@@ -66,7 +66,7 @@ class Task(db.Model):
     timestamp = db.Column(db.DateTime, nullable=False,
                                        default=datetime.utcnow)
     title = db.Column(db.String(80), nullable=False)
-    description = db.Column(db.String(80), nullable=False)
+    description = db.Column(db.String(80))
     upvotes = db.Column(db.Integer)
     downvotes = db.Column(db.Integer)
 

@@ -104,15 +104,15 @@
                                          placeholder="Title" required><br>
                               </div>
                               <div class="form-group">
-                                  Description
-                                  <input class="form-control-sm" type="text" name="description" placeholder="Description" required><br><br>
+                                  Description (optional)
+                                  <input class="form-control-sm" type="text" name="description" placeholder="Description"><br><br>
                               </div>
                               <div class="form-group">
                                   <label class="control-label" for="date">Due Date</label>
                                   <input class="form-control-sm" id="date" name="date" placeholder="MM/DD" type="text" required>
                               </div>
                               <div class="form-group">
-                                  <label class="control-label" for="date">Due Time (Optional, in Military Time)</label>
+                                  <label class="control-label" for="date">Due Time (optional, in military time)</label>
                                   <input class="form-control-sm" id="date" name="time" placeholder="HR:MIN" type="text">
                               </div>
                               <div class="form-group">
@@ -153,33 +153,36 @@
               <div class="modal-body">
                   <div class="card">
                       <div class="card-body">
-                          <form action= "{{ url_for('addEvent') }}" method = "get">
+                          <form action= "{{ url_for('addTask') }}" method = "get">
                               <div class="form-group">
                                   Event Name
                                   <input class="form-control-sm card-title" type="text" name="title"
                                          placeholder="Title" required><br>
                               </div>
                               <div class="form-group">
-                                  Description
-                                  <input class="form-control-sm" type="text" name="description" placeholder="Description" required><br><br>
+                                  Description (optional)
+                                  <input class="form-control-sm" type="text" name="description" placeholder="Description"><br><br>
                               </div>
                               <div class="form-group">
                                   <label class="control-label" for="date">Event Date</label>
                                   <input class="form-control-sm" id="date" name="date" placeholder="MM/DD" type="text" required>
                               </div>
                               <div class="form-group">
-                                  <label class="control-label" for="date">Event Time (optional)</label>
-                                  <input class="form-control-sm" id="date" name="time" placeholder="HR/MIN" type="text">
+                                  <label class="control-label" for="time">Event Time (optional, in military time)</label>
+                                  <input class="form-control-sm" id="date" name="time" placeholder="HR:MIN" type="text">
                               </div>
                               <div class="form-group">
                                   <label class="control-label" for="group">Post to a Group?</label>
                                   <select id="group" name="group" class="selectpicker" data-live-search="true" data-style="btn-outline-primary" title="Select a Group">
                                       {% for group in current_user.groups %}
-
-                                          <option title={{ group.id }} data-tokens= {{ group.id}} data-content = {{ group.id}} >
-                                              {{ group.id}}
+                                          {% if group is not none %}
+                                          <option>
+                                              {{ group.name}}
                                           </option>
+                                          {% endif %}
+
                                       {% endfor %}
+                                      <option> N/A </option>
                                   </select>
                               </div>
                               <button class="btn btn-primary" type="submit">Add Event</button>
