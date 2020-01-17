@@ -107,9 +107,15 @@
                     {{group.name}}
                     {% if group in current_user.groups %}
                       <button class="btn btn-outline-primary float-right" disabled>Joined</button>
+                    {% elif group in current_user.requests %}
+                      <button class="btn btn-outline-primary float-right" disabled>Pending Request</button>
+                    {% elif group.private %}
+                      <form action="{{ url_for('request',group_id = group.id) }}" method = "post">
+                        <button class="btn btn-primary float-right" type="submit">Request to Join</button>
+                      </form>
                     {% else %}
                       <form action="{{ url_for('joinGroup',group_id = group.id) }}" method = "post">
-                        <button class="btn btn-primary float-right" type="submit">Join Group</button>
+                        <button class="btn btn-primary float-right" type="submit">Join</button>
                       </form>
                     {% endif %}
                   {% endif %}

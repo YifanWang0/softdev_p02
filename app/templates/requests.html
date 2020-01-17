@@ -8,24 +8,55 @@
     <h1>Requests to join my groups:</h1>
     </div>
   </div>
-    {% for request in list_of_requests %}
+    {% for group in groups %}
       <div class = "row">
         <div class="col-sm">
-          <div class="card" style="width: 50 rem;">
-              <div class="card-body">
-                  <h5 class="card-title">{{request.group}}</h5>
-                  <p class="card-text">{{request.name}}</p>
-                  <div class="btn-group">
-                      <a href=" "><button type="button" class="btn btn-primary">Accept</button></a>
-                      &nbsp;
-                      <a href=" "><button type="button" class="btn btn-primary">Deny</button></a>
-                  </div><br><br>
-              </div>
-          </div>
+          <h1>{{group.name}}:</h1>
         </div>
       </div>
-      {% endif %}
+        {% for request in group.requests %}
+            <div class = "row">
+              <div class="col-sm">
+              <div class="card">
+                  <div class="card-body">
+                      <h5 class="card-title">{{request.name}}
+                        <form action="{{ url_for('accept', group_id = group.id, requester_id = request.requester_id) }}">
+                            <button type="submit" class="btn btn-outline-primary float-right">
+                                Accept
+                            </button>
+                            <input type="hidden" name="originalPage" value="day">
+                        </form>
+                        <form action="{{ url_for('deny', group_id = group.id, requester_id = request.requester_id) }}">
+                            <button type="submit" class="btn btn-outline-primary float-right">
+                                Decline
+                            </button>
+                            <input type="hidden" name="originalPage" value="day">
+                        </form>
+                      </h5>
+                  </div>
+              </div>
+            </div>
+          </div>
     {% endfor %}
+  {% endfor %}
+  <div class="row">
+    <div class="col-sm">
+    <h1>My requests join groups:</h1>
+    </div>
   </div>
+  {% for request in requests %}
+      <div class = "row">
+        <div class="col-sm">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{request.name}}
+                  <button class="btn btn-outline-primary float-right" disabled>Pending</button>
+                </h5>
+            </div>
+        </div>
+      </div>
+    </div>
+{% endfor %}
+
 {% endif %}
 {% endblock %}

@@ -279,41 +279,38 @@ def search():
                            query=form.search.data,
                            results=results)
 
-## THIS IS NOT THE RIGHT STUFF RN, FROM LAST PROJ
 @login_required
-@app.route("/requests")
-def requests():
+@app.route('/createrequests/<group_id>', methods=['POST'])
+def request(group_id):
     group = Group.query.filter_by(id = int(group_id)).first()
-    if group in current_user.groups:
-    # recieved = current_user.recieved_pending()
-    # counter = 0
-    # searchMatches = []
-    # try:
-    #     for person in recieved:
-    #         if(counter > 45):
-    #             break
-    #         info = []
-    #         userDOB = current_user.dob.split("-")
-    #         this = util.matchmaker.Person(userDOB[0], userDOB[1], userDOB[2])
-    #         otherDOB = User.query_by_id(person, "dob").split("-")
-    #         other = util.matchmaker.Person(otherDOB[0], otherDOB[1], otherDOB[2]) #Person object for other user
-    #         other_user = User(person)
-    #         info.append(other_user.name)
-    #         info.append(round((util.matchmaker.personalityCompatibility(this, other))*100))
-    #         info.append(round((util.matchmaker.sexualCompatibility(this, other))*100))
-    #         info.append(round((util.matchmaker.inLawsCompatibility(this, other))*100))
-    #         info.append(round((util.matchmaker.futureSuccess(this, other))*100))
-    #         info.append(other_user.bio)
-    #         info.append(person)
-    #         info.append(round(current_user().user_dist(person)))
-    #         info.append(other_user.get_starsign().capitalize())
-    #         info.append(starsign_compatibilites[current_user.get_starsign()][other_user.get_starsign()])
-    #         counter += 1
-    #         searchMatches.append(info)
-    # except Exception as e:
-    #     print(e)
-    # session["prev_url"]= "/requests/recieved"
-    return render_template("requests.html")
+    group.requests.append(current_user)
+    db.session.commit()
+    flash('You\'ve successfully requested to join the group!','success')
+    return redirect(url_for('search'))
+
+@login_required
+@app.route("/requests" , methods=['GET','POST'])
+def requests():
+    groups = Group.query.filter_by(admin_id = current_user.id).all()
+    requests = current_user.requests
+    return render_template("requests.html",
+                            groups = groups,
+                            requests = requests)
+
+@app.route("/accept/<group_id>/<requester_id>" , methods=['GET','POST'])
+def accept(requester_id):
+    group = Group.query.filter_by(id = int(group_id)).first()
+    requester = User.query.filter_by(id = int(requester_id)).first()
+    group.requesters.remove(requester)
+    requester.groups.append(group)
+    db.session.commit()
+
+@app.route("/deny/<group_id>/<requester_id>" , methods=['GET','POST'])
+def deny(group_id, requester_id):
+    group = Group.query.filter_by(id = int(group_id)).first()
+    requester = User.query.filter_by(id = int(requester_id)).first()
+    group.requesters.remove(requester)
+    db.session.commit()
 
 @login_required
 @app.route('/myGroups', methods=['GET','POST'])
