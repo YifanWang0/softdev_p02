@@ -149,7 +149,7 @@ def day():
                                                             due_date_m = int(today.strftime('%m')),
                                                             due_date_d=int(today.strftime('%d')) + day - weekday).all()
 
-    return render_template('week.html', personal_tasks = personal_tasks, group_tasks = group_tasks)
+    return render_template('week.html', personal_tasks = personal_tasks, group_tasks = group_tasks, editData=genEditCard(request.args))
 
 @login_required
 @app.route('/month', methods=['GET', 'POST'])
@@ -234,7 +234,7 @@ def genEditCard(args):
     editData={}
     print(args)
     if ('taskID' not in args):
-        return""
+        return {'id':"",'title':"",'description':"",'dueDate':""}
     selected=Task.query.filter_by(id=args['taskID']).first()
     editData['id']=selected.id
     editData['title']=selected.title
@@ -332,7 +332,7 @@ def addTask():
         date = request.args['date'].split("/")
         month = int(date[0])
         day = int(date[1])
-        if 'time' in request.args and request.args['time'] is not None:
+        if 'time' in request.args and request.args['time'] is not None and request.args['time'] != '':
             time = request.args['time'].split(":")
             hour = int(time[0])
             min = int(time[1])
@@ -417,7 +417,7 @@ def editTask(task_id):
     print()
     print(sel)
     db.session.commit()
-    return redirect(url_for("month"))
+    return redirect(url_for(request.args['originalPage']))
 
 @app.route('/editGroup', methods=['GET', 'POST'])
 def editGroup():
