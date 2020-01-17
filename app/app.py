@@ -161,7 +161,7 @@ def day():
                     temp[group.name] = None
         group_tasks[days[day].capitalize() + "  " + (today + timedelta(day - weekday)).strftime('%x')[0:5]] = temp
 
-    my_overdue_tasks = Task.query.filter(Task.group_id == None, Task.due_date_m <= int(today.strftime('%m')),
+    my_overdue_tasks = Task.query.filter(Task.group_id == None, Task.user_id == current_user.id,Task.due_date_m <= int(today.strftime('%m')),
                                          Task.due_date_d < int(today.strftime('%d'))).all()
     group_overdue_tasks = {}
     for group in current_user.groups:
@@ -172,6 +172,7 @@ def day():
             group_overdue_tasks[group.name] = None
     print(group_overdue_tasks)
     print(group_tasks)
+    print(request.args)
     return render_template('week.html', personal_tasks=personal_tasks, group_tasks=group_tasks,
                            my_overdue_tasks=my_overdue_tasks, group_overdue_tasks=group_overdue_tasks,
                            editData=genEditCard(request.args))
