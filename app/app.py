@@ -317,7 +317,7 @@ def search():
 @app.route('/createrequests/<group_id>', methods=['POST'])
 def createrequest(group_id):
     group = Group.query.filter_by(id = int(group_id)).first()
-    group.requests.append(current_user)
+    current_user.requests.append(group)
     db.session.commit()
     flash('You\'ve successfully requested to join the group!','success')
     return redirect(url_for('search'))
@@ -422,7 +422,7 @@ def createGroup():
                 flash('You\'re group name already exists!', 'danger')
                 return redirect(url_for('search'))
 
-        if 'private' in request.form.keys() and request.form['private'] is not None:
+        if 'private' in request.form.keys() and request.form['private']:
             private = True
             print("private")
         group = Group(request.form['name'], current_user.id, request.form['description'], private)

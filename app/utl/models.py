@@ -56,7 +56,6 @@ class Group(db.Model):
     name = db.Column(db.String(80), unique=True, nullable=False)
     description = db.Column(db.String(80), nullable=False)
     private = db.Column(db.Boolean)
-    requests = db.relationship('User', backref='group_requests')
     #relationships
     tasks = db.relationship('Task', backref='group')
     users = association_proxy('groupownership',
@@ -64,7 +63,7 @@ class Group(db.Model):
                               creator=lambda u: GroupLinks(u.id, id))
     requesters = association_proxy('requestownership',
                                    'user',
-                                    creator=lambda u: GroupLinks(u.id, id))
+                                    creator=lambda u: RequestLinks(u.id, id))
 
     def __init__(self, name, user_id, description, private):
         self.name = name
