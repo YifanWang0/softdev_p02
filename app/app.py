@@ -173,9 +173,15 @@ def day():
     print(group_overdue_tasks)
     print(group_tasks)
     print(request.args)
-    return render_template('week.html', personal_tasks=personal_tasks, group_tasks=group_tasks,
+    return render_template('week.html', userTable=genUserTable(), personal_tasks=personal_tasks, group_tasks=group_tasks,
                            my_overdue_tasks=my_overdue_tasks, group_overdue_tasks=group_overdue_tasks,
                            editData=genEditCard(request.args))
+
+def genUserTable():
+    result={}
+    for user in User.query.all():
+        result[user.id] = user.username
+    return result
 
 
 @login_required
@@ -224,14 +230,7 @@ def getWeek(today, weekday, weekIncrem):
                                                                                                                     day - weekday)).strftime(
                                                                                                  '%d'))
                                                                                              ).all()
-    # for day in range(weekday, 7):
-    #     for group in current_user.groups:
-    #         if group == None:
-    #             break
-    #         group_tasks[days[day]][group.name] = Task.query.filter_by(group_id=group.id,
-    #                                                                   due_date_m=int(today.strftime('%m')),
-    #                                                                   due_date_d=int(
-    #                                                                       today.strftime('%d')) + day - weekday).all()
+
     return (personal_tasks, group_tasks)
 
 
