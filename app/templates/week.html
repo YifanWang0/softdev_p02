@@ -9,6 +9,94 @@
                     <h1>This Week</h1>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-sm">
+                    <br>
+                    <div class="card bg-danger text-white">
+                        <h5> Overdue Tasks </h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <h5><h6> My Tasks</h6></h5>
+                </div>
+            </div>
+            {% for task in my_overdue_tasks %}
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="card border-info mb-3">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ task.title }}
+                                    [{{ task.due_date_m }}/{{ task.due_date_d }}]</h6>
+                                <form action="/day">
+                                    <button type="submit" class="btn btn-outline-primary float-right">
+                                        Edit Task
+                                    </button>
+                                    <input type="hidden" name="taskID" value="{{ task.id }}">
+                                </form>
+                                <!-- Button trigger modal -->
+                                <form action="{{ url_for('deleteTask', task_id = task.id) }}">
+                                    <button type="submit" class="btn btn-outline-primary float-right">
+                                        Complete/Clear
+                                    </button>
+                                    <input type="hidden" name="originalPage" value="day">
+                                </form>
+                                <div class="card-text">
+                                    {% if task.description is not none %}
+                                        {{ task.description }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="row">
+                <div class="col-sm">
+                    <h6> Group Tasks</h6>
+                </div>
+            </div>
+            {% for group in group_overdue_tasks %}
+                    {% if group_overdue_tasks[group] is not none %}
+                        <div class="row">
+                            <div class="col-sm">
+                                {{ group }}
+                            </div>
+                        </div>
+                        {% for task in group_overdue_tasks[group] %}
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title">{{ task.title }} posted by {{ task.user_id }}  [{{ task.due_date_m }}/{{ task.due_date_d }}]</h6>
+                                            <form action="/day">
+                                                <button type="submit" class="btn btn-outline-primary float-right">
+                                                    Edit Task
+                                                </button>
+                                                <input type="hidden" name="taskID" value="{{ task.id }}">
+                                            </form>
+                                            <!-- Button trigger modal -->
+                                            <form action="{{ url_for('deleteTask', task_id = task.id) }}">
+                                                <input type="hidden" name="originalPage" value="day">
+                                                <button type="submit" class="btn btn-outline-primary float-right">
+                                                    Complete/Clear
+                                                </button>
+                                            </form>
+                                            <div class="card-text">
+                                                {% if task.description is not none %}
+                                                    {{ task.description }}
+                                                {% endif %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
             {% for day in personal_tasks %}
                 <div class="row">
                     <div class="col-sm">
@@ -36,10 +124,11 @@
                                         <input type="hidden" name="taskID" value="{{ task.id }}">
                                     </form>
                                     <!-- Button trigger modal -->
-                                    <form action="{{ url_for('deleteTask', task_id = task.id) }}" method="post">
+                                    <form action="{{ url_for('deleteTask', task_id = task.id) }}">
                                         <button type="submit" class="btn btn-outline-primary float-right">
                                             Complete/Clear
                                         </button>
+                                        <input type="hidden" name="originalPage" value="day">
                                     </form>
                                     {% if task.due_date_hr is not none%}
                                       <h7>Due - {{ task.due_date_hr }}:{{ task.due_date_mm }}</h7>
@@ -79,11 +168,11 @@
                                                 <input type="hidden" name="taskID" value="{{ task.id }}">
                                             </form>
                                             <!-- Button trigger modal -->
-                                            <form action="{{ url_for('deleteTask', task_id = task.id) }}" method="post">
+                                            <form action="{{ url_for('deleteTask', task_id = task.id) }}">
+                                                <input type="hidden" name="originalPage" value="day">
                                                 <button type="submit" class="btn btn-outline-primary float-right">
                                                     Complete/Clear
                                                 </button>
-                                                <input type="hidden" name="originalPage" value="day">
                                             </form>
                                             {% if task.due_date_hr is not none%}
                                               <h7>Due - {{ task.due_date_hr }}:{{ task.due_date_mm }}</h7>
