@@ -283,8 +283,8 @@ def search():
 @login_required
 @app.route("/requests")
 def requests():
-    group = Group.query.filter_by(id = int(group_id)).first()
-    if group in current_user.groups:
+    # group = Group.query.filter_by(id = int(group_id)).first()
+    # if group in current_user.groups:
     # recieved = current_user.recieved_pending()
     # counter = 0
     # searchMatches = []
