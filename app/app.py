@@ -155,7 +155,7 @@ def day():
                     group_tasks[days[day]] = {group.name : None}
                 print(group_tasks[days[day]])
 
-    return render_template('week.html', personal_tasks = personal_tasks, group_tasks = group_tasks)
+    return render_template('week.html', personal_tasks = personal_tasks, group_tasks = group_tasks, editData=genEditCard(request.args))
 
 @login_required
 @app.route('/month', methods=['GET', 'POST'])
@@ -169,7 +169,7 @@ def month():
     data.append(genWeek(getWeek(today,weekday,1)))
     data.append(genWeek(getWeek(today,weekday,2)))
     data.append(genWeek(getWeek(today,weekday,3)))
-    return render_template('month.html', data=data,month=today.strftime('%B'),displayData=genDisplayCard(request.args))
+    return render_template('month.html', data=data,month=today.strftime('%B'),displayData=genDisplayCard(request.args),editData=genEditCard(request.args))
 
 def getWeek(today,weekday,weekIncrem):
     personal_tasks = {}
@@ -223,7 +223,9 @@ def genWeek(data):
 def genDisplayCard(args):
     displayData = [1,[],""]
     if len(args)==0:
-        return [0,[]]
+        return [0,[],""]
+    if len(args)==1:
+        return[2,[],""]
     if(args['day']=="" or args['month']==""):
         return [0, []]
     arr = Task.query.filter_by(user_id = current_user.id,
@@ -233,6 +235,25 @@ def genDisplayCard(args):
     displayData[1] = arr
     displayData[2] = "Tasks for: " + args['month'] + "/" + args['day']
     return displayData
+
+def genEditCard(args):
+    editData={}
+    print(args)
+    if ('taskID' not in args):
+        return {'id':"",'title':"",'description':"",'dueDate':""}
+    selected=Task.query.filter_by(id=args['taskID']).first()
+    editData['id']=selected.id
+    editData['title']=selected.title
+    editData['description']=selected.description
+    editData['dueDate']=processNum(selected.due_date_m)+"/"+processNum(selected.due_date_d)
+    print(editData)
+    return editData
+
+def processNum(n):
+    if n > 9:
+        return str(n)
+    else:
+        return "0" + str(n)
 
 
 @login_required
@@ -383,11 +404,24 @@ def deleteTask(task_id):
     db.session.delete(task)
     db.session.commit()
     flash('You\'ve successfully completed your task', 'success')
-    return redirect(url_for('day'))
+    print(request.args)
+    return redirect(url_for(request.args['originalPage']))
 
-@app.route('/editTask', methods=['GET', 'POST'])
-def editTask():
-    return "f"
+@app.route('/editTask/<task_id>', methods=['GET', 'POST'])
+def editTask(task_id):
+    print(request.args)
+    sel = Task.query.filter_by(id = task_id).first()
+    date = request.args['date'].split("/")
+    month = int(date[0])
+    day = int(date[1])
+    sel.title = request.args['title']
+    sel.description = request.args['description']
+    sel.due_date_m = month
+    sel.due_date_d = day
+    print()
+    print(sel)
+    db.session.commit()
+    return redirect(url_for(request.args['originalPage']))
 
 @app.route('/editGroup', methods=['GET', 'POST'])
 def editGroup():

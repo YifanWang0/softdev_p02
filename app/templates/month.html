@@ -73,7 +73,7 @@
                                 </div>
                                 <div class="cellButton" style="float:bottom">
                                     <form action="/month">
-                                        <button style="float:right">View</button>
+                                        <button class="btn btn-dark" style="float:right">View</button>
                                         <input type="hidden" name="month" value="{{ day[0] }}">
                                         <input type="hidden" name="day" value="{{ day[1] }}">
                                     </form>
@@ -104,10 +104,18 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <h6 class="card-title">{{ task.title }} [ ]
-                                            <button type="button" class="btn btn-outline-primary float-right"
-                                                    data-toggle="modal" data-target="#exampleModal">
-                                                Edit Task
-                                            </button>
+                                            <form action="/month">
+                                                <button type="submit" class="btn btn-outline-primary float-right">
+                                                    Edit Task
+                                                </button>
+                                                <input type="hidden" name="taskID" value="{{ task.id }}">
+                                            </form>
+                                            <form action="{{ url_for('deleteTask', task_id = task.id) }}">
+                                                <button type="submit" class="btn btn-outline-primary float-right">
+                                                    Complete/Clear
+                                                </button>
+                                                <input type="hidden" name="originalPage" value="month">
+                                            </form>
                                         </h6>
                                         <!-- Button trigger modal -->
                                         <div class="card-text">{{ task.description }}
@@ -124,13 +132,59 @@
             </div>
         </div>
     </div>
+    <div id="editTask" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Task</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="{{ url_for('editTask', task_id = editData.id) }}" method="get">
+                                <div class="form-group">
+                                    Task Name
+                                    <input class="form-control-sm card-title" type="text" name="title"
+                                           value="{{ editData.title }}" required><br>
+                                </div>
+                                <div class="form-group">
+                                    Description
+                                    <input class="form-control-sm" type="text" name="description"
+                                           value="{{ editData.description }}" required><br><br>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="date">Due Date</label>
+                                    <input class="form-control-sm" id="date" name="date" value="{{ editData.dueDate }}"
+                                           type="text"
+                                           required>
+                                </div>
+                                <button class="btn btn-primary" type="submit">Update</button>
+                                <input type="hidden" name="originalPage" value="month">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <p id="displayMode" style="visibility: hidden" class="{{ displayData[0] }}">{{ displayData[0] }}</p>
     <script>
-        check=document.getElementById("displayMode").innerHTML;
+        check = document.getElementById("displayMode").innerHTML;
         console.log(check);
-        if (check=="1"){
+        if (check == "1") {
             $(document).ready(function () {
                 $("#popUp").modal('show');
+            })
+        }
+        if (check == "2") {
+            $(document).ready(function () {
+                $("#editTask").modal('show');
             })
         }
     </script>
