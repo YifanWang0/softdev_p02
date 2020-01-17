@@ -11,7 +11,7 @@ class GroupLinks(db.Model): #this is automatically created when you append users
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
 
     user = db.relationship('User', backref='groupownership')
-    group = db.relationship('Group', backref='groupownership')
+    group = db.relationship('Group', backref='grretoupownership')
 
     def __init__(self, user_id, group_id):
         self.user_id = user_id
@@ -57,13 +57,14 @@ class Group(db.Model):
     description = db.Column(db.String(80), nullable=False)
     private = db.Column(db.Boolean)
     #relationships
+    requests = db.relationship('User', backref='group_requests')
     tasks = db.relationship('Task', backref='group')
     users = association_proxy('groupownership',
                               'user',
                               creator=lambda u: GroupLinks(u.id, id))
     requesters = association_proxy('requestownership',
                                    'user',
-                                    creator=lambda u: RequestLinks(u.id, id))
+                                    creator=lambda u: GroupLinks(u.id, id))
 
     def __init__(self, name, user_id, description, private):
         self.name = name
@@ -80,13 +81,10 @@ class Task(db.Model):
     due_date_d = db.Column(db.Integer, nullable = False)
     due_date_hr = db.Column(db.Integer)
     due_date_mm = db.Column(db.Integer)
-    priority = db.Column(db.Integer, nullable = False)
     timestamp = db.Column(db.DateTime, nullable=False,
                                        default=datetime.utcnow)
     title = db.Column(db.String(80), nullable=False)
     description = db.Column(db.String(80))
-    upvotes = db.Column(db.Integer)
-    downvotes = db.Column(db.Integer)
 
     def __init__(self, user_id, month, day, hour, min, priority, title, description, group_id):
         self.user_id = user_id

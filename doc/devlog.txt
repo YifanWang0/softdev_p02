@@ -51,6 +51,10 @@ josephL -- 2020-01-11 15:23
 developing relationships in models.py
 finding ways to implement credibility
 
+yifanW -- 2020-01-11 21:42
+Updated design doc database tables
+Updated descriptions for site features
+
 emilyZ -- 2020-01-12 21:50
 added routes and templates for navbar
 implemented basic add task template for frontend
@@ -62,6 +66,9 @@ josephL -- 2020-01-13 18:59
 fixed app.py, fixed button to show only when logged in
 fixing models
 
+yifanW -- 2020-01-13 22:51
+attempting credibility
+
 clementC -- 2020-01-13 23:00
 created "create" button
 added popover to the "create" button
@@ -70,8 +77,11 @@ added modals and buttons in the popover
 josephL -- 2020-01-14 8:24
 added creating task function
 
-clementC -- 2020-01-13 8:32
+clementC -- 2020-01-14 8:32
 copied forms into modals
+
+yifanW -- 2020-01-14 8:40
+Updated design doc database tables and roles
 
 josephL -- 2020-01-14 10:29
 created join group html form
@@ -80,7 +90,7 @@ josephL -- 2020-01-14 15:26
 started writing search
 
 josephL -- 2020-01-14 22:06
-added many functions like joining group and making tasks but largeyl unfinished
+added many functions like joining group and making tasks but largely unfinished
 
 josephL -- 2020-01-15 00:05
 creating functions like:
@@ -92,7 +102,10 @@ and adding more modal forms
 emilyZ -- 2020-01-15 00:11
 added relevant photo and description to homepage
 
-josephL --2020-01-15 6:12
+yifanW -- 2020-01-15 03:37
+Attempted to sync account with Google calendar but did not work
+
+josephL -- 2020-01-15 6:12
 fixed several backend issues
 implemented several backend tasks like creating tasks
 and integrated it with frontend
@@ -101,23 +114,30 @@ clementC -- 2020-01-15 8:36
 fixed modals not passing data
 
 emilyZ -- 2020-01-15 11:35
-implemented frontend and backend for viewing tasks for the day.
-edited home to only allow for log in and sign up if not logged in.
+implemented frontend and backend for viewing tasks for the day
+edited home to only allow for log in and sign up if not logged in
 
 josephL -- 2020-01-15 17:23
 working on frontend to show information well
 implemented search
 
-clementC -- 2020-01-15 22:48
-fixed search errors and addTask errors
-created basic calendar(display only)
-
-emilyZ == 2020-01-15 23:26
-implemented daily to display every task for the week, first displaying personal tasks, then group tasks.
-edited gitignore to prevent merge conflicts
+yifanW -- 2020-01-15 19:29
+updated README
+Tried to implement requests but ran into errors and issues
 
 josephL-- 2020-01-15 22:23
 finished several tasks and backend and cleaned up
+
+clementC -- 2020-01-15 22:48
+fixed search errors and addTask errors
+created basic calendar (display only)
+
+emilyZ -- 2020-01-15 23:26
+implemented daily to display every task for the week, first displaying personal tasks, then group tasks.
+edited gitignore to prevent merge conflicts
+
+yifanW -- 2020-01-16 02:02
+Updated database tables, some front end page displays and app.py
 
 clementC -- 2020-01-16 02:12
 display personal tasks in calendar
