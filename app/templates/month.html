@@ -103,7 +103,7 @@
                             <div class="col-sm">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h6 class="card-title">{{ task.title }} [ ]
+                                        <h6 class="card-title">{{ task.title }} [ ]</h6>
                                             <form action="/month">
                                                 <button type="submit" class="btn btn-outline-primary float-right">
                                                     Edit Task
@@ -116,9 +116,10 @@
                                                 </button>
                                                 <input type="hidden" name="originalPage" value="month">
                                             </form>
-                                        </h6>
+
                                         <!-- Button trigger modal -->
-                                        <div class="card-text">{{ task.description }}</div>
+                                        <div class="card-text">{{ task.description }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -188,3 +189,5 @@
         }
     </script>
 {% endblock %}
+
+
