@@ -27,6 +27,9 @@ if not creds or creds.invalid:
     flow = client.flow_from_clientsecrets('client_secrets.json', SCOPES)
     creds = tools.run_flow(flow, store, flags)
 '''
+import os
+DIR = os.path.dirname(__file__) or '.'
+DIR += '/'
 
 app = Flask(__name__)
 
@@ -35,7 +38,7 @@ DEBUG = True
 # app configurations
 app.config['SECRET_KEY'] = ('very secret key wow' if DEBUG else os.urandom(64))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DIR + 'database.db'
 app.config['USE_SESSION_FOR_NEXT'] = True
 
 keyfile = open('keys.json')
