@@ -4,7 +4,7 @@ Flask-Login==0.4.1
 Flask-SQLAlchemy==2.4.1
 Flask-WTF==0.14.2
 Jinja2==2.10.3
-urllib3==1.25.7
+urllib3==1.25.8
 Werkzeug==0.16.0
 itsdangerous==1.1.0
 Jinja2==2.10.3
